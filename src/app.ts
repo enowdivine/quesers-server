@@ -17,8 +17,10 @@ import categoryRoutes from "./routes/categories/category.routes";
 import withdrawalRoutes from "./routes/withdrawals/withdraw.routes";
 import instructorRoutes from "./routes/instructor/instructor.routes";
 import transactionRoutes from "./routes/transactions/transaction.routes";
+import certificateRoutes from "./routes/certificates/certificate.routes";
 import questionsRoutes from "./routes/questionsAndAnswers/question.routes";
 import announcementRoutes from "./routes/announcements/announcement.routes";
+
 // Fapshi imports
 const fapshi = require("./routes/fapshi/fapshi");
 
@@ -52,6 +54,7 @@ app.use(`/api/${process.env.API_VERSION}/rating`, ratingRoutes);
 app.use(`/api/${process.env.API_VERSION}/lesson`, lessonRoutes);
 app.use(`/api/${process.env.API_VERSION}/mails`, sendMailRoutes);
 app.use(`/api/${process.env.API_VERSION}/chapter`, chapterRoutes);
+app.use(`/api/${process.env.API_VERSION}/cert`, certificateRoutes);
 app.use(`/api/${process.env.API_VERSION}/q-and-a`, questionsRoutes);
 app.use(`/api/${process.env.API_VERSION}/category`, categoryRoutes);
 app.use(`/api/${process.env.API_VERSION}/discount`, discountRoutes);
