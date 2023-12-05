@@ -6,7 +6,6 @@ class CetificateController {
     try {
       const userId = req.body.userId;
       const courseId = req.body.courseId;
-      const certId = req.body.certId;
       const cert = await Cert.find({
         $and: [
           {
@@ -14,9 +13,6 @@ class CetificateController {
           },
           {
             courseId: { $regex: courseId },
-          },
-          {
-            certId: { $regex: certId },
           },
         ],
       });
