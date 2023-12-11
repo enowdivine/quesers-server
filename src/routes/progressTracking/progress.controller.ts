@@ -4,17 +4,9 @@ import Progress from "./progress.model";
 class ProgressController {
   async register(req: Request, res: Response) {
     try {
-      const userId = req.body.userId;
-      const lessonId = req.body.lessonId;
       const watched = await Progress.find({
-        $and: [
-          {
-            userId,
-          },
-          {
-            lessonId,
-          },
-        ],
+        userId: req.body.userId,
+        lessonId: req.body.lessonId,
       });
       if (watched.length > 0) {
         return;
