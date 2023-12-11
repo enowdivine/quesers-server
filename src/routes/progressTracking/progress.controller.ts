@@ -9,7 +9,9 @@ class ProgressController {
         lessonId: req.body.lessonId,
       });
       if (watched.length > 0) {
-        return;
+        return res.status(409).json({
+          message: "lesson already watched",
+        });
       }
       const newWatched = new Progress({
         userId: req.body.userId,
