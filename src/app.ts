@@ -20,6 +20,7 @@ import transactionRoutes from "./routes/transactions/transaction.routes";
 import certificateRoutes from "./routes/certificates/certificate.routes";
 import questionsRoutes from "./routes/questionsAndAnswers/question.routes";
 import announcementRoutes from "./routes/announcements/announcement.routes";
+import progressTrackingRoutes from "./routes/progressTracking/progress.routes";
 
 // Fapshi imports
 const fapshi = require("./routes/fapshi/fapshi");
@@ -62,6 +63,10 @@ app.use(`/api/${process.env.API_VERSION}/instructor`, instructorRoutes);
 app.use(`/api/${process.env.API_VERSION}/withdrawals`, withdrawalRoutes);
 app.use(`/api/${process.env.API_VERSION}/transaction`, transactionRoutes);
 app.use(`/api/${process.env.API_VERSION}/announcement`, announcementRoutes);
+app.use(
+  `/api/${process.env.API_VERSION}/progress-tracking`,
+  progressTrackingRoutes
+);
 
 // Fapshi webhook
 let socketID: any;
