@@ -20,7 +20,7 @@ export default function mailer(option: Option): void {
     },
   });
   const mailOptions: any = {
-    from: "deonicode@gmail.com",
+    from: "hello@deonicode.com",
     to: option.to,
     subject: option.subject,
     html: html,
