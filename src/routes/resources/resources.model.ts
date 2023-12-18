@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const course = new mongoose.Schema(
+const resource = new mongoose.Schema(
   {
     vendorId: {
       type: String,
@@ -68,4 +68,4 @@ const course = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Course", course);
+export default mongoose.model("Resource", resource);
