@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import Admin from "./admin.model";
-import Instructor from "../instructor/instructor.model";
+import Vendor from "../vendor/vendor.model";
 import bcrypt from "bcrypt";
 import _ from "lodash";
 
@@ -80,7 +80,7 @@ class AdminController {
           }
         );
       } else if (admin === null) {
-        const user = await Instructor.findOne({ email: req.body.email });
+        const user = await Vendor.findOne({ email: req.body.email });
         if (user) {
           if (user.status === "pending") {
             res.status(500).json({

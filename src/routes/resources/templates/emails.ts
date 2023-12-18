@@ -1,4 +1,4 @@
-export function courseApproval(username: string, courseTitle: string) {
+export function resourceApproval(username: string, courseTitle: string) {
   return `
             <h3>Hi ${username},</h3>
             <p>
@@ -20,7 +20,7 @@ export function courseApproval(username: string, courseTitle: string) {
   `;
 }
 
-export function courseSuspended(username: string, courseTitle: string) {
+export function resourceSuspended(username: string, courseTitle: string) {
   return `
             <h3>Hi ${username},</h3>
             <p>

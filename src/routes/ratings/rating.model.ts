@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const rating = new mongoose.Schema(
   {
-    courseId: {
+    resourceId: {
       type: String,
-      required: [true, "courseId is required"],
+      required: [true, "resourceId is required"],
     },
     userId: {
       type: String,

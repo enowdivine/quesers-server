@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Withdraw from "./withdraw.model";
 //
-import instructorModel from "../instructor/instructor.model";
+import vendorModel from "../vendor/vendor.model";
 import sendEmail from "../../services/email/sendEmail";
 import {
   widthdrawalRequest,
@@ -19,9 +19,9 @@ class ChapterController {
       await withdraw
         .save()
         .then(async (response) => {
-          const user = await instructorModel.findOne({ _id: req.body.userId });
+          const user = await vendorModel.findOne({ _id: req.body.userId });
           sendEmail({
-            to: "deonicode@gmail.com",
+            to: "quesers@gmail.com",
             subject: `New Withdrawal Request`,
             message: widthdrawalRequest(
               user?.username as string,
@@ -43,13 +43,11 @@ class ChapterController {
     }
   }
 
-  async Withdraw(req: Request, res: Response) {
+  async WithdrawRequest(req: Request, res: Response) {
     try {
       const request = await Withdraw.findOne({ _id: req.params.id });
       if (request) {
-        return res.status(200).json({
-          request,
-        });
+        return res.status(200).json(request);
       } else {
         return res.status(404).json({
           message: "request not found",
@@ -60,7 +58,7 @@ class ChapterController {
     }
   }
 
-  async withdrawalsRequest(req: Request, res: Response) {
+  async userWithdrawalsRequest(req: Request, res: Response) {
     try {
       const requests = await Withdraw.find({
         userId: req.params.userId,
@@ -100,13 +98,13 @@ class ChapterController {
       if (request) {
         request.status = req.body.status;
         await request.save().then(async (response) => {
-          const user = await instructorModel.findOne({ _id: response.userId });
+          const user = await vendorModel.findOne({ _id: response.userId });
 
           if (user && response.amount) {
             if (req.body.status === "approved") {
               let revenue = user.totalRevenue;
               let revenueBalance = revenue - response.amount;
-              const res = await instructorModel.updateOne(
+              const res = await vendorModel.updateOne(
                 { _id: response.userId },
                 { $set: { totalRevenue: revenueBalance } }
               );

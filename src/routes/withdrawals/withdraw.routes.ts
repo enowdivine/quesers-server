@@ -6,8 +6,8 @@ const withdrawalRequest = new WithDrawal();
 
 router.post("/withdrawal-request", withdrawalRequest.create);
 
-router.get("/request/:id", withdrawalRequest.Withdraw);
-router.get("/requests/:userId", withdrawalRequest.withdrawalsRequest);
+router.get("/request/:id", withdrawalRequest.WithdrawRequest);
+router.get("/requests/:userId", withdrawalRequest.userWithdrawalsRequest);
 router.get("/all-requests", withdrawalRequest.allWithdrawalsRequest);
 
 router.put("/update-status/:id", withdrawalRequest.updateStatus);

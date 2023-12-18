@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import Transaction from "./transaction.model";
 import userModel from "../user/user.model";
-import instructorModel from "../instructor/instructor.model";
-import courseModel from "../courses/course.model";
+import vendorModel from "../vendor/vendor.model";
+import resourceModel from "../resources/resources.model";
 import _ from "lodash";
 
 class TransactionController {
   async create(req: Request, res: Response) {
     try {
       const transaction = new Transaction({
-        courseId: req.body.courseId,
+        resourceId: req.body.resourceId,
         userId: req.body.userId,
-        instructorId: req.body.instructorId,
+        vendorId: req.body.vendorId,
         transactionId: req.body.transactionId,
         financialTransId: req.body.financialTransId,
         amount: req.body.amount,
@@ -29,36 +29,47 @@ class TransactionController {
       await transaction
         .save()
         .then(async () => {
-          let course = await courseModel.findOne({ _id: req.body.courseId });
-          if (course) {
+          let resource = await resourceModel.findOne({
+            _id: req.body.resourceId,
+          });
+          if (resource) {
             const saleCountIncrement = {
-              saleCount: course.saleCount + 1,
+              saleCount: resource.saleCount + 1,
             };
-            course = _.extend(course, saleCountIncrement);
-            course.save().then(async () => {
-              const user = await userModel.updateOne(
-                { _id: req.body.userId },
-                { $push: { purchasedCourses: req.body.courseId } }
-              );
-              const instructor = await instructorModel.updateOne(
-                { _id: req.body.instructorId },
-                { $inc: { totalRevenue: req.body.revenue } }
-              );
-              if (user.acknowledged && instructor.acknowledged) {
-                res.status(201).json({
-                  message: "Successful",
-                });
+            resource = _.extend(resource, saleCountIncrement);
+            resource.save().then(async () => {
+              const user = await userModel.findOne({ _id: req.body.userId });
+              if (user) {
+                let revenue = user.walletBalance;
+                let balance = revenue - req.body.amount;
+
+                const userupdate = await userModel.updateOne(
+                  { _id: req.body.userId },
+                  {
+                    $push: { resources: req.body.resourceId },
+                    $set: { walletBalance: balance },
+                  }
+                );
+                const vendor = await vendorModel.updateOne(
+                  { _id: req.body.vendorId },
+                  { $inc: { totalRevenue: req.body.revenue } }
+                );
+                if (userupdate.acknowledged && vendor.acknowledged) {
+                  res.status(201).json({
+                    message: "Successful",
+                  });
+                }
               }
             });
           } else {
             res.status(404).json({
-              message: "course not found",
+              message: "resource not found",
             });
           }
         })
         .catch((err) => {
           res.status(500).json({
-            message: "error purchasing course",
+            message: "error making purchase",
             error: err,
           });
         });
@@ -84,15 +95,13 @@ class TransactionController {
     }
   }
 
-  async instructorTransaction(req: Request, res: Response) {
+  async vendorTransaction(req: Request, res: Response) {
     try {
       const transactions = await Transaction.find({
-        instructorId: req.params.instructorId,
+        vendorId: req.params.vendorId,
       }).sort({ createdAt: -1 });
       if (transactions) {
-        return res.status(200).json({
-          transactions,
-        });
+        return res.status(200).json(transactions);
       } else {
         return res.status(404).json({
           message: "No transaction found",
@@ -107,9 +116,7 @@ class TransactionController {
     try {
       const transactions = await Transaction.find().sort({ createdAt: -1 });
       if (transactions) {
-        return res.status(200).json({
-          transactions,
-        });
+        return res.status(200).json(transactions);
       } else {
         return res.status(404).json({
           message: "no transaction found",

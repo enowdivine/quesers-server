@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import Rating from "./rating.model";
-import courseModel from "../courses/course.model";
+import resourceModel from "../resources/resources.model";
 
 class RatingController {
   async create(req: Request, res: Response) {
     try {
       const rating = new Rating({
-        courseId: req.body.courseId,
+        resourceId: req.body.resourceId,
         userId: req.body.userId,
         rating: req.body.rating,
         comment: req.body.comment,
@@ -14,22 +14,22 @@ class RatingController {
       await rating
         .save()
         .then(async () => {
-          const courseRatings = await Rating.find({
-            courseId: req.body.courseId,
+          const resourceRatings = await Rating.find({
+            resourceId: req.body.resourceId,
           });
 
           // calculate rating
-          if (courseRatings && courseRatings.length > 0) {
+          if (resourceRatings && resourceRatings.length > 0) {
             let count = 0;
-            courseRatings.forEach((item: any) => {
+            resourceRatings.forEach((item: any) => {
               return (count += item.rating);
             });
             const newRate =
-              Math.round((count / courseRatings.length) * 10) / 10;
-            // course update
-            const course = await courseModel.updateOne(
+              Math.round((count / resourceRatings.length) * 10) / 10;
+            // resource update
+            const resource = await resourceModel.updateOne(
               {
-                _id: req.body.courseId,
+                _id: req.body.resourceId,
               },
               {
                 $set: {
@@ -37,9 +37,9 @@ class RatingController {
                 },
               }
             );
-            if (course.acknowledged) {
+            if (resource.acknowledged) {
               res.status(201).json({
-                message: "Thank you for rating this course",
+                message: "Thank you for rating this resource",
               });
             }
           } else {
@@ -50,19 +50,19 @@ class RatingController {
         })
         .catch((err) => {
           res.status(500).json({
-            message: "error rating course",
+            message: "error rating resource",
             error: err,
           });
         });
     } catch (error) {
-      console.error("error rating course", error);
+      console.error("error rating resource", error);
     }
   }
 
   async ratings(req: Request, res: Response) {
     try {
       const ratings = await Rating.find({
-        courseId: req.params.id,
+        resourceId: req.params.id,
       });
       if (ratings) {
         return res.status(200).json(ratings);

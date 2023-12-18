@@ -2,17 +2,17 @@ import mongoose from "mongoose";
 
 const transaction = new mongoose.Schema(
   {
-    courseId: {
+    resourceId: {
       type: String,
-      required: [true, "courseId is reuired"],
+      required: [true, "resourceId is reuired"],
     },
     userId: {
       type: String,
       required: [true, "userId is reuired"],
     },
-    instructorId: {
+    vendorId: {
       type: String,
-      required: [true, "instructorId is reuired"],
+      required: [true, "vendorId is reuired"],
     },
     transactionId: {
       type: String,

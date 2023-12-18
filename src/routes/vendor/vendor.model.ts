@@ -1,16 +1,19 @@
 import mongoose from "mongoose";
 
-const instructor = new mongoose.Schema(
+const vendor = new mongoose.Schema(
   {
+    role: {
+      type: String,
+      default: "vendor",
+    },
     username: {
       type: String,
       required: [true, "username is required"],
     },
     email: {
       type: String,
-      required: [true, "instructor email is required"],
     },
-    phoneNumber: {
+    phone: {
       type: String,
       required: [true, "phone number is required"],
     },
@@ -22,14 +25,6 @@ const instructor = new mongoose.Schema(
       type: String,
       required: [true, "level of education is required"],
     },
-    targetSubject: {
-      type: String,
-      required: [true, "subject of specification is required"],
-    },
-    age: {
-      type: Number,
-      required: [true, "age is required"],
-    },
     resume: {
       type: Object,
       required: [true, "resume is required"],
@@ -38,21 +33,9 @@ const instructor = new mongoose.Schema(
       type: String,
       required: [true, "instructor pasword is required"],
     },
-    bio: {
-      type: String,
-      default: "",
-    },
     avatar: {
       type: Object,
       default: null,
-    },
-    country: {
-      type: String,
-      default: "",
-    },
-    role: {
-      type: String,
-      default: "instructor",
     },
     status: {
       type: String,
@@ -62,19 +45,10 @@ const instructor = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    // socials
-    twitter: {
-      type: String,
-      default: "",
-    },
-    linkedIn: {
-      type: String,
-      default: "",
-    },
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.model("Instructor", instructor);
+export default mongoose.model("Vendor", vendor);

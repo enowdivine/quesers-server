@@ -8,20 +8,10 @@ import cors from "cors";
 import userRoutes from "./routes/user/user.routes";
 import adminRoutes from "./routes/admin/admin.routes";
 import ratingRoutes from "./routes/ratings/rating.routes";
-import courseRoutes from "./routes/courses/course.routes";
-import lessonRoutes from "./routes/lessons/lesson.routes";
-import sendMailRoutes from "./routes/sendMail/mail.routes";
-import chapterRoutes from "./routes/chapters/chapter.routes";
-import discountRoutes from "./routes/discount/discount.routes";
-import categoryRoutes from "./routes/categories/category.routes";
+import courseRoutes from "./routes/resources/resources.routes";
 import withdrawalRoutes from "./routes/withdrawals/withdraw.routes";
-import instructorRoutes from "./routes/instructor/instructor.routes";
+import instructorRoutes from "./routes/vendor/vendor.routes";
 import transactionRoutes from "./routes/transactions/transaction.routes";
-import certificateRoutes from "./routes/certificates/certificate.routes";
-import questionsRoutes from "./routes/questionsAndAnswers/question.routes";
-import announcementRoutes from "./routes/announcements/announcement.routes";
-import progressTrackingRoutes from "./routes/progressTracking/progress.routes";
-
 // Fapshi imports
 const fapshi = require("./routes/fapshi/fapshi");
 
@@ -52,21 +42,9 @@ app.use(`/api/${process.env.API_VERSION}/user`, userRoutes);
 app.use(`/api/${process.env.API_VERSION}/admin`, adminRoutes);
 app.use(`/api/${process.env.API_VERSION}/course`, courseRoutes);
 app.use(`/api/${process.env.API_VERSION}/rating`, ratingRoutes);
-app.use(`/api/${process.env.API_VERSION}/lesson`, lessonRoutes);
-app.use(`/api/${process.env.API_VERSION}/mails`, sendMailRoutes);
-app.use(`/api/${process.env.API_VERSION}/chapter`, chapterRoutes);
-app.use(`/api/${process.env.API_VERSION}/cert`, certificateRoutes);
-app.use(`/api/${process.env.API_VERSION}/q-and-a`, questionsRoutes);
-app.use(`/api/${process.env.API_VERSION}/category`, categoryRoutes);
-app.use(`/api/${process.env.API_VERSION}/discount`, discountRoutes);
 app.use(`/api/${process.env.API_VERSION}/instructor`, instructorRoutes);
 app.use(`/api/${process.env.API_VERSION}/withdrawals`, withdrawalRoutes);
 app.use(`/api/${process.env.API_VERSION}/transaction`, transactionRoutes);
-app.use(`/api/${process.env.API_VERSION}/announcement`, announcementRoutes);
-app.use(
-  `/api/${process.env.API_VERSION}/progress-tracking`,
-  progressTrackingRoutes
-);
 
 // Fapshi webhook
 let socketID: any;
@@ -93,17 +71,14 @@ app.post(
     // Handle the event
     switch (event.status) {
       case "SUCCESSFUL":
-        // Then define and call a function to handle a SUCCESSFUL payment
         console.log(event, "successful");
         io.to(socketID).emit("status", event);
         break;
       case "FAILED":
-        // Then define and call a function to handle a FAILED payment
         console.log(event, "failed");
         io.to(socketID).emit("status", event);
         break;
       case "EXPIRED":
-        // Then define and call a function to handle an expired transaction
         console.log(event, "expired");
         io.to(socketID).emit("status", event);
         break;
@@ -112,14 +87,13 @@ app.post(
         console.log(`Unhandled event status: ${event.type}`);
         io.to(socketID).emit("status", event);
     }
-
     // Return a 200 response to acknowledge receipt of the event
     res.send();
   }
 );
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Deonicode Server 🚀");
+  res.send("Outshine Server 🚀");
 });
 
 const PORT: any = process.env.PORT || 5000;

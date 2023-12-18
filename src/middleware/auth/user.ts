@@ -19,14 +19,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
           success: false,
           message: "Invalid Token",
         });
-      if (payload.role === "review-manager" || "admin") {
-        next();
-      } else {
-        return res.json({
-          success: false,
-          message: "Unauthorized Request !!",
-        });
-      }
+      next();
     }
   );
 }

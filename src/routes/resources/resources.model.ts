@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const course = new mongoose.Schema(
   {
-    instructorId: {
+    vendorId: {
       type: String,
       required: [true, "instructorId is required"],
     },
@@ -13,49 +13,50 @@ const course = new mongoose.Schema(
     slug: {
       type: String,
     },
-    introVideoUrl: {
+    doc: {
+      type: Object,
+      default: null,
+    },
+    screenshots: {
+      type: Array,
+      default: [],
+    },
+    features: {
       type: String,
       default: "",
     },
     desc: {
-      type: Object,
-      required: [true, "description is required"],
+      type: String,
     },
-    category: {
-      type: Array,
-      required: [true, "category is required"],
+    resourceType: {
+      type: String,
     },
-    coverImage: {
-      type: Object,
-      required: [true, "cover image is required"],
+    faculty: {
+      type: String,
+    },
+    department: {
+      type: String,
+    },
+    level: {
+      type: String,
+    },
+    semester: {
+      type: String,
     },
     price: {
-      type: Number || String,
-      default: 0,
-    },
-    courseLevel: {
-      type: String,
-      default: "",
+      type: Number,
     },
     saleCount: {
       type: Number,
       default: 0,
-    },
-    duration: {
-      type: Number,
-      default: 0,
-    },
-    tags: {
-      type: Array,
-      default: [],
     },
     language: {
       type: String,
       default: "",
     },
     rating: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 0,
     },
     isApproved: {
       type: Boolean,

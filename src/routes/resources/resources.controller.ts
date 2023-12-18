@@ -1,20 +1,19 @@
 import { Request, Response } from "express";
-import Course from "./course.model";
+import Resource from "./resources.model";
 import UserModel from "../user/user.model";
 import { deleteObject } from "../../middleware/s3/s3";
 //
 import adminModel from "../admin/admin.model";
-import instructorModel from "../instructor/instructor.model";
+import vendorModel from "../vendor/vendor.model";
 import sendEmail from "../../services/email/sendEmail";
-import { courseApproval, courseSuspended } from "./templates/emails";
+import { resourceApproval, resourceSuspended } from "./templates/emails";
 import slugify from "../../helpers/slugify";
-import mongoose, { PipelineStage } from "mongoose";
 
 interface MulterRequest extends Request {
   file: any;
 }
 
-class CourseController {
+class ResourceController {
   async create(req: Request, res: Response) {
     try {
       const multerFiles = JSON.parse(JSON.stringify(req.file));
@@ -24,30 +23,30 @@ class CourseController {
           key: multerFiles?.key,
         };
         const slug = slugify(req.body.title);
-        const course = new Course({
-          instructorId: req.body.instructorId,
+        const course = new Resource({
+          vendorId: req.body.vendorId,
           title: req.body.title,
           slug: slug,
-          introVideoUrl: req.body.introVideoUrl,
+          features: req.body.features,
           desc: req.body.desc,
-          category: req.body.category,
-          coverImage: image,
+          resourceType: req.body.resourceType,
+          faculty: req.body.faculty,
+          department: req.body.department,
+          semester: req.body.semester,
           price: req.body.price,
-          courseLevel: req.body.courseLevel,
-          duration: req.body.duration,
+          level: req.body.level,
           language: req.body.language,
-          tags: req.body.tags,
         });
         await course
           .save()
           .then(() => {
             res.status(201).json({
-              message: "course created",
+              message: "resource uploaded",
             });
           })
           .catch((err) => {
             res.status(500).json({
-              message: "error creating course",
+              message: "error uploading resource",
               error: err,
             });
           });
@@ -57,100 +56,96 @@ class CourseController {
         });
       }
     } catch (error) {
-      console.error("error creating course", error);
+      console.error("error uploading resource", error);
     }
   }
 
-  async course(req: Request, res: Response) {
+  async resource(req: Request, res: Response) {
     try {
-      const course = await Course.findOne({ _id: req.params.id });
-      if (course) {
-        return res.status(200).json({
-          course,
-        });
+      const resoure = await Resource.findOne({ _id: req.params.id });
+      if (resoure) {
+        return res.status(200).json(resoure);
       } else {
         return res.status(404).json({
-          message: "course not found",
+          message: "resoure not found",
         });
       }
     } catch (error) {
-      console.error("error fetching course", error);
+      console.error("error fetching resoure", error);
     }
   }
 
-  async courses(req: Request, res: Response) {
+  async resources(req: Request, res: Response) {
     try {
-      const courses = await Course.find().sort({ createdAt: -1 });
-      if (courses) {
-        return res.status(200).json({
-          courses,
-        });
+      const resources = await Resource.find().sort({ createdAt: -1 });
+      if (resources) {
+        return res.status(200).json(resources);
       } else {
         return res.status(404).json({
-          message: "no course found",
+          message: "no resource found",
         });
       }
     } catch (error) {
-      console.error("error fetching course", error);
+      console.error("error fetching resources", error);
     }
   }
 
-  async instructorCourses(req: Request, res: Response) {
+  async vendorResource(req: Request, res: Response) {
     try {
-      const courses = await Course.find({
-        instructorId: req.params.instructorId,
+      const resources = await Resource.find({
+        vendorId: req.params.vendorId,
       }).sort({ createdAt: -1 });
-      if (courses) {
+      if (resources) {
         return res.status(200).json({
-          courses,
+          resources,
         });
       } else {
         return res.status(404).json({
-          message: "no course found",
+          message: "no resource found",
         });
       }
     } catch (error) {
-      console.error("error fetching courses", error);
+      console.error("error fetching resources", error);
     }
   }
 
-  async approvedCourses(req: Request, res: Response) {
+  async approvedResources(req: Request, res: Response) {
     try {
-      const courses = await Course.find({ isApproved: true }).sort({
+      const resources = await Resource.find({ isApproved: true }).sort({
         createdAt: -1,
       });
-      if (courses) {
+      if (resources) {
         return res.status(200).json({
-          courses,
+          resources,
         });
       } else {
         return res.status(404).json({
-          message: "no course found",
+          message: "no resource found",
         });
       }
     } catch (error) {
-      console.error("error fetching courses", error);
+      console.error("error fetching resources", error);
     }
   }
 
-  async purchasedCourses(req: Request, res: Response) {
+  async purchasedResources(req: Request, res: Response) {
     try {
       const user = await UserModel.findOne({ _id: req.params.userId });
       if (user) {
-        const purchasedCourses = user.purchasedCourses;
-        const courses = await Course.find({ _id: { $in: purchasedCourses } });
-        if (courses.length > 0) {
-          return res.status(200).json({
-            courses,
-          });
+        const purchasedResources = user.resources;
+        const resources = await Resource.find({
+          _id: { $in: purchasedResources },
+        });
+        if (resources.length > 0) {
+          return res.status(200).json(resources);
         } else {
           return res.status(404).json({
-            message: "no course found",
+            message: "no resource found",
           });
         }
       }
     } catch (error) {
-      console.error("error fetching courses", error);
+      console.error("error fetching resources", error);
     }
   }
 
@@ -162,114 +157,111 @@ class CourseController {
           doc: multerFiles?.location,
           key: multerFiles?.key,
         };
-        const course = await Course.findOne({ _id: req.params.id });
-        if (course) {
-          const imageKey = course.coverImage.key;
-          const response = await deleteObject(imageKey);
-        }
+        const resource = await Resource.findOne({ _id: req.params.id });
+        // if (resource) {
+        //   const imageKey = resource.coverImage.key;
+        //   const response = await deleteObject(imageKey);
+        // }
         const slug = slugify(req.body.title);
-        const updatedCourse = await Course.updateOne(
+        const updatedResource = await Resource.updateOne(
           {
             _id: req.params.id,
           },
           {
             $set: {
+              vendorId: req.body.vendorId,
               title: req.body.title,
               slug: slug,
-              introVideoUrl: req.body.introVideoUrl,
+              features: req.body.features,
               desc: req.body.desc,
-              category: req.body.category,
+              resourceType: req.body.resourceType,
+              faculty: req.body.faculty,
+              department: req.body.department,
+              semester: req.body.semester,
               price: req.body.price,
-              coverImage: image,
-              courseLevel: req.body.courseLevel,
-              duration: req.body.duration,
+              level: req.body.level,
               language: req.body.language,
-              tags: req.body.tags,
             },
           }
         );
-        if (updatedCourse.acknowledged) {
+        if (updatedResource.acknowledged) {
           res.status(200).json({
             message: "update successful",
           });
         } else {
           res.status(404).json({
-            message: "course not found",
+            message: "resource not found",
           });
         }
       } else {
         const slug = slugify(req.body.title);
-        const course = await Course.updateOne(
+        const resource = await Resource.updateOne(
           {
             _id: req.params.id,
           },
           {
             $set: {
+              vendorId: req.body.vendorId,
               title: req.body.title,
               slug: slug,
-              introVideoUrl: req.body.introVideoUrl,
+              features: req.body.features,
               desc: req.body.desc,
-              category: req.body.category,
+              resourceType: req.body.resourceType,
+              faculty: req.body.faculty,
+              department: req.body.department,
+              semester: req.body.semester,
               price: req.body.price,
-              courseLevel: req.body.courseLevel,
-              duration: req.body.duration,
+              level: req.body.level,
               language: req.body.language,
-              tags: req.body.tags,
             },
           }
         );
-        if (course.acknowledged) {
+        if (resource.acknowledged) {
           res.status(200).json({
             message: "update successful",
           });
         } else {
           res.status(404).json({
-            message: "course not found",
+            message: "resource not found",
           });
         }
       }
     } catch (error) {
-      console.error("error updating course", error);
+      console.error("error updating resource", error);
     }
   }
 
   async updateStatus(req: Request, res: Response) {
     try {
-      const course = await Course.findOne({ _id: req.params.id });
-      if (course) {
-        course.isApproved = !course.isApproved;
-        await course.save().then(async () => {
-          const admin = await adminModel.findOne({
-            _id: course.instructorId,
-          });
-          const instructor = await instructorModel.findOne({
-            _id: course.instructorId,
+      const resource = await Resource.findOne({ _id: req.params.id });
+      if (resource) {
+        resource.isApproved = !resource.isApproved;
+        await resource.save().then(async () => {
+          const vendor = await vendorModel.findOne({
+            _id: resource.vendorId,
           });
           sendEmail({
-            to:
-              admin === null
-                ? (instructor?.email as string)
-                : (admin.email as string),
-            subject: course.isApproved
-              ? `${course.title} Approved`
-              : `${course.title} Suspended`,
-            message: course.isApproved
-              ? courseApproval(
-                  admin === null ? (instructor?.username as string) : "Admin",
-                  course?.title as string
+            to: vendor?.email as string,
+            subject: resource.isApproved
+              ? `${resource.title} Approved`
+              : `${resource.title} Suspended`,
+            message: resource.isApproved
+              ? resourceApproval(
+                  vendor?.username as string,
+                  resource?.title as string
                 )
-              : courseSuspended(
-                  admin === null ? (instructor?.username as string) : "Admin",
-                  course?.title as string
+              : resourceSuspended(
+                  vendor?.username as string,
+                  resource?.title as string
                 ),
           });
           return res.status(200).json({
-            message: "course status updated",
+            message: "resource status updated",
           });
         });
       } else {
         return res.status(404).json({
-          message: "course not found",
+          message: "resource not found",
         });
       }
     } catch (error) {
@@ -277,9 +269,19 @@ class CourseController {
     }
   }
 
-  async deleteCourse(req: Request, res: Response) {
+  async deleteResource(req: Request, res: Response) {
     try {
-      const response = await Course.deleteOne({ _id: req.params.id });
+      const resource = await Resource.findOne({ _id: req.params.id });
+      if (resource) {
+        if (resource.screenshots.length > 0) {
+          resource.screenshots.map(async (item) => {
+            await deleteObject(item.key);
+          });
+        }
+        const imageKey = resource.doc.key;
+        await deleteObject(imageKey);
+      }
+      const response = await Resource.deleteOne({ _id: req.params.id });
       if (response.deletedCount > 0) {
         res.status(200).json({
           message: "course deleted",
@@ -294,7 +296,7 @@ class CourseController {
     }
   }
 
-  async searchCourse(req: Request, res: Response) {
+  async searchResource(req: Request, res: Response) {
     try {
       const data = JSON.parse(req.params.data);
       // console.log(data);
@@ -306,7 +308,7 @@ class CourseController {
             return letter.toUpperCase();
           }
         );
-      const category = data.category
+      const resourceType = data.resourceType
         .toLowerCase()
         .replace(
           /^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g,
@@ -314,7 +316,7 @@ class CourseController {
             return letter.toUpperCase();
           }
         );
-      const courseLevel = data.courseLevel
+      const faculty = data.faculty
         .toLowerCase()
         .replace(
           /^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g,
@@ -322,7 +324,23 @@ class CourseController {
             return letter.toUpperCase();
           }
         );
-      const tags = data.tags
+      const department = data.department
+        .toLowerCase()
+        .replace(
+          /^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g,
+          function (letter: string) {
+            return letter.toUpperCase();
+          }
+        );
+      const level = data.level
+        .toLowerCase()
+        .replace(
+          /^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g,
+          function (letter: string) {
+            return letter.toUpperCase();
+          }
+        );
+      const semester = data.semester
         .toLowerCase()
         .replace(
           /^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g,
@@ -341,7 +359,7 @@ class CourseController {
       const rating = data.rating;
       const startPrice = data.startPrice;
       const endPrice = data.endPrice;
-      const courses = await Course.find({
+      const courses = await Resource.find({
         $and: [
           {
             isApproved: true,
@@ -350,16 +368,19 @@ class CourseController {
             title: { $regex: title },
           },
           {
-            category: { $regex: category },
+            resourceType: { $regex: resourceType },
           },
           {
-            courseLevel: { $regex: courseLevel },
+            faculty: { $regex: faculty },
           },
           {
-            tags: { $regex: tags },
+            department: { $regex: department },
           },
           {
-            language: { $regex: language },
+            level: { $regex: level },
+          },
+          {
+            semester: { $regex: semester },
           },
           {
             rating: { $gte: rating, $lte: 6 },
@@ -388,7 +409,7 @@ class CourseController {
       const agg: any[] = [
         {
           $search: {
-            index: "searchCourses",
+            index: "searchResources",
             text: {
               query: searchPhrase,
               path: {
@@ -400,12 +421,12 @@ class CourseController {
         },
       ];
 
-      const courses = await Course.aggregate(agg);
-      if (courses) {
-        res.status(200).json(courses);
+      const resources = await Resource.aggregate(agg);
+      if (resources) {
+        res.status(200).json(resources);
       } else {
         res.status(404).json({
-          message: "No Course Found",
+          message: "no resource found",
         });
       }
     } catch (error) {
@@ -414,4 +435,4 @@ class CourseController {
   }
 }
 
-export default CourseController;
+export default ResourceController;

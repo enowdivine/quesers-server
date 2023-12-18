@@ -7,7 +7,7 @@ const transaction = new Transaction();
 router.post("/create", transaction.create);
 
 router.get("/transaction/:id", transaction.transaction);
-router.get("/transactions/:instructorId", transaction.instructorTransaction);
+router.get("/transactions/:vendorId", transaction.vendorTransaction);
 router.get("/transactions", transaction.transactions);
 
 export default router;
