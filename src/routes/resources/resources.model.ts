@@ -2,6 +2,15 @@ import mongoose from "mongoose";
 
 const resource = new mongoose.Schema(
   {
+    screenshots: {
+      type: Array,
+      default: [],
+    },
+    doc: {
+      type: Object,
+      default: null,
+    },
+    //
     vendorId: {
       type: String,
       required: [true, "instructorId is required"],
@@ -12,14 +21,6 @@ const resource = new mongoose.Schema(
     },
     slug: {
       type: String,
-    },
-    doc: {
-      type: Object,
-      default: null,
-    },
-    screenshots: {
-      type: Array,
-      default: [],
     },
     features: {
       type: String,

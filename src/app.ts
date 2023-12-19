@@ -7,13 +7,19 @@ import cors from "cors";
 // api imports
 import userRoutes from "./routes/user/user.routes";
 import adminRoutes from "./routes/admin/admin.routes";
+import vendorRoutes from "./routes/vendor/vendor.routes";
 import ratingRoutes from "./routes/ratings/rating.routes";
-import courseRoutes from "./routes/resources/resources.routes";
+import resourceRoutes from "./routes/resources/resources.routes";
 import withdrawalRoutes from "./routes/withdrawals/withdraw.routes";
-import instructorRoutes from "./routes/vendor/vendor.routes";
 import transactionRoutes from "./routes/transactions/transaction.routes";
+//
+import resourceTypeRoutes from "./routes/resourceTypes/rt.routes";
+import facultyRoutes from "./routes/faculty/faculty.routes";
+import departmentRoutes from "./routes/department/department.routes";
 // Fapshi imports
 const fapshi = require("./routes/fapshi/fapshi");
+// swagger imports
+import setupSwagger from "./swagger";
 
 const corsOptions = {
   origin: "*",
@@ -31,6 +37,7 @@ const io = require("socket.io")(server, {
     credentials: true,
   },
 });
+
 dbConnect();
 
 app.use(cors(corsOptions));
@@ -40,11 +47,15 @@ app.use(bodyParser.json());
 
 app.use(`/api/${process.env.API_VERSION}/user`, userRoutes);
 app.use(`/api/${process.env.API_VERSION}/admin`, adminRoutes);
-app.use(`/api/${process.env.API_VERSION}/course`, courseRoutes);
+app.use(`/api/${process.env.API_VERSION}/resource`, resourceRoutes);
 app.use(`/api/${process.env.API_VERSION}/rating`, ratingRoutes);
-app.use(`/api/${process.env.API_VERSION}/instructor`, instructorRoutes);
-app.use(`/api/${process.env.API_VERSION}/withdrawals`, withdrawalRoutes);
+app.use(`/api/${process.env.API_VERSION}/vendor`, vendorRoutes);
+app.use(`/api/${process.env.API_VERSION}/withdrawal`, withdrawalRoutes);
 app.use(`/api/${process.env.API_VERSION}/transaction`, transactionRoutes);
+//
+app.use(`/api/${process.env.API_VERSION}/faculty`, facultyRoutes);
+app.use(`/api/${process.env.API_VERSION}/department`, departmentRoutes);
+app.use(`/api/${process.env.API_VERSION}/resource-type`, resourceTypeRoutes);
 
 // Fapshi webhook
 let socketID: any;
@@ -95,6 +106,8 @@ app.post(
 app.get("/", (req: Request, res: Response) => {
   res.send("Outshine Server 🚀");
 });
+
+setupSwagger(app);
 
 const PORT: any = process.env.PORT || 5000;
 server.listen(PORT, () => {

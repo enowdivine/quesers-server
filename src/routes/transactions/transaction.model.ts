@@ -2,9 +2,11 @@ import mongoose from "mongoose";
 
 const transaction = new mongoose.Schema(
   {
+    transactionType: {
+      type: String,
+    },
     resourceId: {
       type: String,
-      required: [true, "resourceId is reuired"],
     },
     userId: {
       type: String,
@@ -12,7 +14,6 @@ const transaction = new mongoose.Schema(
     },
     vendorId: {
       type: String,
-      required: [true, "vendorId is reuired"],
     },
     transactionId: {
       type: String,
@@ -20,7 +21,6 @@ const transaction = new mongoose.Schema(
     },
     financialTransId: {
       type: String,
-      required: [true, "financialTransId is reuired"],
     },
     amount: {
       type: Number,
@@ -28,7 +28,6 @@ const transaction = new mongoose.Schema(
     },
     revenue: {
       type: Number,
-      required: [true, "revenue is reuired"],
     },
     username: {
       type: String,
@@ -36,7 +35,6 @@ const transaction = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, "email is reuired"],
     },
     phonenumber: {
       type: String,
@@ -56,15 +54,12 @@ const transaction = new mongoose.Schema(
     },
     webhook: {
       type: String,
-      required: [true, "webhook method is reuired"],
     },
     dateInitiated: {
       type: Date,
-      required: [true, "dateInitiated method is reuired"],
     },
     dateConfirmed: {
       type: Date,
-      required: [true, "dateConfirmed method is reuired"],
     },
   },
   {

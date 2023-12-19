@@ -2,8 +2,6 @@ import { Request, Response } from "express";
 import Resource from "./resources.model";
 import UserModel from "../user/user.model";
 import { deleteObject } from "../../middleware/s3/s3";
-//
-import adminModel from "../admin/admin.model";
 import vendorModel from "../vendor/vendor.model";
 import sendEmail from "../../services/email/sendEmail";
 import { resourceApproval, resourceSuspended } from "./templates/emails";
@@ -16,14 +14,43 @@ interface MulterRequest extends Request {
 class ResourceController {
   async create(req: Request, res: Response) {
     try {
-      const multerFiles = JSON.parse(JSON.stringify(req.file));
+      const multerFiles = JSON.parse(JSON.stringify(req.files));
       if (multerFiles) {
-        const image = {
-          doc: multerFiles?.location,
-          key: multerFiles?.key,
+        const screenshotOne = multerFiles.sreenschotOne[0];
+        const screenshotTwo = multerFiles.sreenschotTwo[0];
+        const screenshotThree = multerFiles.screenshotThree[0];
+        const screenshotFour = multerFiles.screenshotFour[0];
+        const resourceDoc = multerFiles.resourceDoc[0];
+
+        const screenshots = [
+          {
+            doc: screenshotOne?.location,
+            key: screenshotOne?.key,
+          },
+          {
+            doc: screenshotTwo?.location,
+            key: screenshotTwo?.key,
+          },
+          {
+            doc: screenshotThree?.location,
+            key: screenshotThree?.key,
+          },
+          {
+            doc: screenshotFour?.location,
+            key: screenshotFour?.key,
+          },
+        ];
+
+        const document = {
+          doc: resourceDoc?.location,
+          key: resourceDoc?.key,
         };
+
         const slug = slugify(req.body.title);
         const course = new Resource({
+          screenshots: screenshots,
+          doc: document,
+          //
           vendorId: req.body.vendorId,
           title: req.body.title,
           slug: slug,
@@ -151,17 +178,37 @@ class ResourceController {
 
   async update(req: Request, res: Response) {
     try {
-      const multerFiles = (req as MulterRequest).file;
+      // const multerFiles = (req as MulterRequest).file;
+      const multerFiles = JSON.parse(JSON.stringify(req.files));
       if (multerFiles) {
-        const image = {
-          doc: multerFiles?.location,
-          key: multerFiles?.key,
-        };
-        const resource = await Resource.findOne({ _id: req.params.id });
-        // if (resource) {
-        //   const imageKey = resource.coverImage.key;
-        //   const response = await deleteObject(imageKey);
-        // }
+        let screenshots = [];
+        let document;
+
+        if (multerFiles.sreenschotOne.length > 0) {
+          const screenshotOne = multerFiles.sreenschotOne[0];
+          screenshots.push(screenshotOne);
+        }
+        if (multerFiles.sreenschotTwo.length > 0) {
+          const sreenschotTwo = multerFiles.sreenschotTwo[0];
+          screenshots.push(sreenschotTwo);
+        }
+        if (multerFiles.screenshotThree.length > 0) {
+          const screenshotThree = multerFiles.screenshotThree[0];
+          screenshots.push(screenshotThree);
+        }
+        if (multerFiles.screenshotFour.length > 0) {
+          const screenshotFour = multerFiles.screenshotFour[0];
+          screenshots.push(screenshotFour);
+        }
+        if (multerFiles.resourceDoc.length > 0) {
+          const resourceDoc = multerFiles.resourceDoc[0];
+          const doc = {
+            doc: resourceDoc?.location,
+            key: resourceDoc?.key,
+          };
+          document = doc;
+        }
+
         const slug = slugify(req.body.title);
         const updatedResource = await Resource.updateOne(
           {
@@ -169,6 +216,7 @@ class ResourceController {
           },
           {
             $set: {
+              doc: document,
               vendorId: req.body.vendorId,
               title: req.body.title,
               slug: slug,
@@ -182,11 +230,16 @@ class ResourceController {
               level: req.body.level,
               language: req.body.language,
             },
+            $push: {
+              screenshots: {
+                $each: screenshots,
+              },
+            },
           }
         );
         if (updatedResource.acknowledged) {
           res.status(200).json({
-            message: "update successful",
+            message: "success",
           });
         } else {
           res.status(404).json({
@@ -262,6 +315,42 @@ class ResourceController {
       } else {
         return res.status(404).json({
           message: "resource not found",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async updateScreenshotArray(req: Request, res: Response) {
+    try {
+      const image = req.body.image;
+      const singleResource = await Resource.findOne({ _id: req.params.id });
+      if (singleResource) {
+        const imageToDelete = singleResource?.screenshots.filter(
+          (img) => img.key === image.key
+        );
+        await deleteObject(imageToDelete[0]?.key);
+      }
+      const resource = await Resource.updateOne(
+        { _id: req.params.id },
+        {
+          // remove image from array
+          $pull: {
+            screenshots: {
+              $in: [image],
+            },
+          },
+        }
+      );
+      if (resource.acknowledged) {
+        res.status(200).json({
+          message: "Image Deleted",
+          resource: resource,
+        });
+      } else {
+        res.status(404).json({
+          message: "Failed",
         });
       }
     } catch (error) {

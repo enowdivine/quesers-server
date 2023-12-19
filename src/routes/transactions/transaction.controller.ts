@@ -13,18 +13,13 @@ class TransactionController {
         userId: req.body.userId,
         vendorId: req.body.vendorId,
         transactionId: req.body.transactionId,
-        financialTransId: req.body.financialTransId,
         amount: req.body.amount,
-        revenue: req.body.revenue,
         phonenumber: req.body.phone,
         username: req.body.name,
-        email: req.body.email,
         paymentMethod: req.body.medium,
         status: req.body.status,
         statusCode: req.body.statusCode,
-        webhook: req.body.webhook,
-        dateInitiated: req.body.dateInitiated,
-        dateConfirmed: req.body.dateConfirmed,
+        transactionType: "purchase",
       });
       await transaction
         .save()
@@ -52,7 +47,7 @@ class TransactionController {
                 );
                 const vendor = await vendorModel.updateOne(
                   { _id: req.body.vendorId },
-                  { $inc: { totalRevenue: req.body.revenue } }
+                  { $inc: { totalRevenue: req.body.amount } }
                 );
                 if (userupdate.acknowledged && vendor.acknowledged) {
                   res.status(201).json({
@@ -75,6 +70,59 @@ class TransactionController {
         });
     } catch (error) {
       console.error("error creating transaction", error);
+    }
+  }
+
+  async topUpWallet(req: Request, res: Response) {
+    try {
+      const transaction = new Transaction({
+        userId: req.body.userId,
+        transactionId: req.body.transactionId,
+        financialTransId: req.body.financialTransId,
+        amount: req.body.amount,
+        revenue: req.body.revenue,
+        phonenumber: req.body.phone,
+        username: req.body.name,
+        paymentMethod: req.body.medium,
+        status: req.body.status,
+        statusCode: req.body.statusCode,
+        webhook: req.body.webhook,
+        dateInitiated: req.body.dateInitiated,
+        dateConfirmed: req.body.dateConfirmed,
+        transactionType: "topup",
+      });
+      await transaction
+        .save()
+        .then(async () => {
+          let user = await userModel.findOne({ _id: req.params.id });
+          if (user) {
+            const newWalletBalance = {
+              walletBalance: user.walletBalance + req.body.revenue,
+            };
+            user = _.extend(user, newWalletBalance);
+            user
+              .save()
+              .then(() => {
+                res.status(201).json({
+                  message: "success",
+                });
+              })
+              .catch((err) => {
+                res.status(500).json({
+                  message: "error making topup",
+                  error: err,
+                });
+              });
+          }
+        })
+        .catch((err) => {
+          res.status(500).json({
+            message: "error finalizing transaction",
+            error: err,
+          });
+        });
+    } catch (error) {
+      console.error("error deleting user", error);
     }
   }
 

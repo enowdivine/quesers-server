@@ -9,5 +9,6 @@ router.post("/create", transaction.create);
 router.get("/transaction/:id", transaction.transaction);
 router.get("/transactions/:vendorId", transaction.vendorTransaction);
 router.get("/transactions", transaction.transactions);
+router.get("/wallet-top-up", transaction.topUpWallet);
 
 export default router;
