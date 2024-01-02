@@ -16,8 +16,8 @@ class ResourceController {
     try {
       const multerFiles = JSON.parse(JSON.stringify(req.files));
       if (multerFiles) {
-        const screenshotOne = multerFiles.sreenschotOne[0];
-        const screenshotTwo = multerFiles.sreenschotTwo[0];
+        const screenshotOne = multerFiles.screenshotOne[0];
+        const screenshotTwo = multerFiles.screenshotTwo[0];
         const screenshotThree = multerFiles.screenshotThree[0];
         const screenshotFour = multerFiles.screenshotFour[0];
         const resourceDoc = multerFiles.resourceDoc[0];
@@ -79,11 +79,14 @@ class ResourceController {
           });
       } else {
         return res.status(500).json({
-          message: "Cover image upload failed",
+          message: "error uploading resource",
         });
       }
     } catch (error) {
       console.error("error uploading resource", error);
+      return res.status(500).json({
+        message: "error uploading resource",
+      });
     }
   }
 
@@ -99,6 +102,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error("error fetching resoure", error);
+      return res.status(500).json({
+        message: "error fetching resource",
+      });
     }
   }
 
@@ -114,6 +120,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
     }
   }
 
@@ -133,6 +142,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
     }
   }
 
@@ -152,6 +164,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
     }
   }
 
@@ -173,6 +188,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
     }
   }
 
@@ -281,6 +299,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error("error updating resource", error);
+      return res.status(500).json({
+        message: "error updating resources",
+      });
     }
   }
 
@@ -319,6 +340,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error(error);
+      return res.status(500).json({
+        message: "an error occurred",
+      });
     }
   }
 
@@ -355,6 +379,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error(error);
+      return res.status(500).json({
+        message: "an error occurred",
+      });
     }
   }
 
@@ -381,7 +408,10 @@ class ResourceController {
         });
       }
     } catch (error) {
-      console.error("error deleting course", error);
+      console.error("error deleting resource", error);
+      return res.status(500).json({
+        message: "error deleting resource",
+      });
     }
   }
 
@@ -488,6 +518,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error(error);
+      return res.status(500).json({
+        message: "an error occurred",
+      });
     }
   }
 
@@ -520,6 +553,9 @@ class ResourceController {
       }
     } catch (error) {
       console.error(error);
+      return res.status(500).json({
+        message: "an error occurred",
+      });
     }
   }
 }
