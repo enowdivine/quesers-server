@@ -132,9 +132,7 @@ class ResourceController {
         vendorId: req.params.vendorId,
       }).sort({ createdAt: -1 });
       if (resources) {
-        return res.status(200).json({
-          resources,
-        });
+        return res.status(200).json(resources);
       } else {
         return res.status(404).json({
           message: "no resource found",
@@ -154,9 +152,7 @@ class ResourceController {
         createdAt: -1,
       });
       if (resources) {
-        return res.status(200).json({
-          resources,
-        });
+        return res.status(200).json(resources);
       } else {
         return res.status(404).json({
           message: "no resource found",
@@ -309,17 +305,17 @@ class ResourceController {
     try {
       const resource = await Resource.findOne({ _id: req.params.id });
       if (resource) {
-        resource.isApproved = !resource.isApproved;
+        resource.status = req.body.status;
         await resource.save().then(async () => {
           const vendor = await vendorModel.findOne({
             _id: resource.vendorId,
           });
           sendEmail({
             to: vendor?.email as string,
-            subject: resource.isApproved
+            subject: resource.status
               ? `${resource.title} Approved`
               : `${resource.title} Suspended`,
-            message: resource.isApproved
+            message: resource.status
               ? resourceApproval(
                   vendor?.username as string,
                   resource?.title as string
