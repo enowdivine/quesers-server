@@ -197,8 +197,9 @@ class ResourceController {
       if (multerFiles) {
         let screenshots = [];
         let document;
+        console.log(multerFiles);
 
-        if (multerFiles.sreenschotOne.length > 0) {
+        if (multerFiles.sreenschotOne?.length > 0) {
           const screenshotOne = multerFiles.sreenschotOne[0];
           screenshots.push(screenshotOne);
         }

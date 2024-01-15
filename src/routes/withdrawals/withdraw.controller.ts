@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import Withdraw from "./withdraw.model";
-//
 import vendorModel from "../vendor/vendor.model";
 import sendEmail from "../../services/email/sendEmail";
 import {
@@ -12,34 +12,52 @@ import {
 class ChapterController {
   async create(req: Request, res: Response) {
     try {
-      const withdraw = new Withdraw({
-        userId: req.body.userId,
-        amount: req.body.amount,
-      });
-      await withdraw
-        .save()
-        .then(async (response) => {
-          const user = await vendorModel.findOne({ _id: req.body.userId });
-          sendEmail({
-            to: "quesers@gmail.com",
-            subject: `New Withdrawal Request`,
-            message: widthdrawalRequest(
-              user?.username as string,
-              req.body.amount as number
-            ),
-          });
-          res.status(201).json({
-            message: "request sent",
-          });
-        })
-        .catch((err) => {
-          res.status(500).json({
-            message: "error sending request",
-            error: err,
-          });
-        });
+      const user = await vendorModel.findOne({ _id: req.body.userId });
+      if (user) {
+        bcrypt.compare(
+          req.body.password,
+          user.password!,
+          async (err: any, result: any) => {
+            if (err) {
+              res.status(401).json({
+                message: "password incorrect",
+              });
+            }
+            if (result) {
+              const withdraw = new Withdraw({
+                userId: req.body.userId,
+                amount: req.body.amount,
+              });
+              await withdraw
+                .save()
+                .then(() => {
+                  // sendEmail({
+                  //   to: user?.email as string,
+                  //   subject: `New Withdrawal Request`,
+                  //   message: widthdrawalRequest(
+                  //     user?.username as string,
+                  //     req.body.amount as number
+                  //   ),
+                  // });
+                  res.status(201).json({
+                    message: "request sent",
+                  });
+                })
+                .catch((err) => {
+                  res.status(500).json({
+                    message: "error sending request",
+                    error: err,
+                  });
+                });
+            }
+          }
+        );
+      }
     } catch (error) {
       console.error("error sending request", error);
+      return res.status(500).json({
+        message: "an error occured",
+      });
     }
   }
 
@@ -79,9 +97,7 @@ class ChapterController {
     try {
       const requests = await Withdraw.find({}).sort({ createdAt: -1 });
       if (requests) {
-        return res.status(200).json({
-          requests,
-        });
+        return res.status(200).json(requests);
       } else {
         return res.status(404).json({
           message: "no request found",
