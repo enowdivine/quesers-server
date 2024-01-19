@@ -89,8 +89,10 @@ class VendorController {
           }
         );
         if (user.acknowledged) {
+          const vendor = await Vendor.findOne({ _id: req.params.id });
           res.status(200).json({
             message: "update successful",
+            vendor,
           });
         } else {
           res.status(404).json({

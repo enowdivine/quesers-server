@@ -30,7 +30,7 @@ class ChapterController {
               });
               await withdraw
                 .save()
-                .then(() => {
+                .then((withdrawal) => {
                   // sendEmail({
                   //   to: user?.email as string,
                   //   subject: `New Withdrawal Request`,
@@ -41,6 +41,7 @@ class ChapterController {
                   // });
                   res.status(201).json({
                     message: "request sent",
+                    withdrawal,
                   });
                 })
                 .catch((err) => {
