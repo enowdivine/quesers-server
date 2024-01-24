@@ -18,8 +18,6 @@ import facultyRoutes from "./routes/faculty/faculty.routes";
 import departmentRoutes from "./routes/department/department.routes";
 // Fapshi imports
 const fapshi = require("./routes/fapshi/fapshi");
-// swagger imports
-import setupSwagger from "./swagger";
 
 const corsOptions = {
   origin: "*",
@@ -106,8 +104,6 @@ app.post(
 app.get("/", (req: Request, res: Response) => {
   res.send("Outshine Server 🚀");
 });
-
-setupSwagger(app);
 
 const PORT: any = process.env.PORT || 5000;
 server.listen(PORT, () => {
