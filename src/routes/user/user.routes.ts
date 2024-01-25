@@ -7,8 +7,8 @@ const router: Router = express.Router();
 const user = new UserAuth();
 
 router.post("/register", user.register);
-router.post("/login", userProtected, user.login);
-router.post("/forgot-password", userProtected, user.forgotPassword);
+router.post("/login", user.login);
+router.post("/forgot-password", user.forgotPassword);
 
 // router.get("/verification/:token", user.verifyEmail);
 router.get("/user/:id", userProtected, user.user);
