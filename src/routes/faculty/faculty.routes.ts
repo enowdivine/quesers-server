@@ -6,7 +6,7 @@ const faculty = new Faculty();
 
 router.post("/create", faculty.create);
 router.get("/read/:id", faculty.read);
-router.get("/readone", faculty.reads);
+router.get("/", faculty.reads);
 router.put("/update", faculty.update);
 router.delete("/delete", faculty.delete);
 

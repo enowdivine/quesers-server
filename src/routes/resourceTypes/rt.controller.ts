@@ -18,10 +18,10 @@ class RTController {
       });
       newRT
         .save()
-        .then((response) => {
+        .then((resourceType) => {
           res.status(201).json({
             message: "success",
-            response,
+            resourceType,
           });
         })
         .catch((err) => {
@@ -37,38 +37,38 @@ class RTController {
 
   async read(req: Request, res: Response) {
     try {
-      const resoure = await RessourceType.findOne({ _id: req.params.id });
-      if (resoure) {
-        return res.status(200).json(resoure);
+      const resourceType = await RessourceType.findOne({ _id: req.params.id });
+      if (resourceType) {
+        return res.status(200).json(resourceType);
       } else {
         return res.status(404).json({
-          message: "resoure not found",
+          message: "resourse type not found",
         });
       }
     } catch (error) {
-      console.error("error fetching resoure", error);
+      console.error("error fetching resourceType", error);
     }
   }
 
   async reads(req: Request, res: Response) {
     try {
-      const resources = await RessourceType.find().sort({ createdAt: -1 });
-      if (resources) {
-        return res.status(200).json(resources);
+      const resourceTypes = await RessourceType.find().sort({ createdAt: -1 });
+      if (resourceTypes) {
+        return res.status(200).json(resourceTypes);
       } else {
         return res.status(404).json({
-          message: "no resource found",
+          message: "no resourse type found",
         });
       }
     } catch (error) {
-      console.error("error fetching resources", error);
+      console.error("error fetching resourceTypes", error);
     }
   }
 
   async update(req: Request, res: Response) {
     try {
       const slug = slugify(req.body.title);
-      const resource = await RessourceType.updateOne(
+      const resourceType = await RessourceType.updateOne(
         {
           _id: req.params.id,
         },
@@ -79,17 +79,17 @@ class RTController {
           },
         }
       );
-      if (resource.acknowledged) {
+      if (resourceType.acknowledged) {
         res.status(200).json({
           message: "success",
         });
       } else {
         res.status(404).json({
-          message: "resource not found",
+          message: "resourse type not found",
         });
       }
     } catch (error) {
-      console.error("error updating resource  type", error);
+      console.error("error updating resourse type", error);
     }
   }
 
@@ -102,11 +102,11 @@ class RTController {
         });
       } else {
         res.status(404).json({
-          message: "resource type not found",
+          message: "resourse type not found",
         });
       }
     } catch (error) {
-      console.error("error deleting resource type", error);
+      console.error("error deleting resourse type", error);
     }
   }
 }

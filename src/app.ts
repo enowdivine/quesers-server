@@ -51,9 +51,9 @@ app.use(`/api/${process.env.API_VERSION}/vendor`, vendorRoutes);
 app.use(`/api/${process.env.API_VERSION}/withdrawal`, withdrawalRoutes);
 app.use(`/api/${process.env.API_VERSION}/transaction`, transactionRoutes);
 //
-app.use(`/api/${process.env.API_VERSION}/faculty`, facultyRoutes);
-app.use(`/api/${process.env.API_VERSION}/department`, departmentRoutes);
-app.use(`/api/${process.env.API_VERSION}/resource-type`, resourceTypeRoutes);
+app.use(`/api/${process.env.API_VERSION}/faculties`, facultyRoutes);
+app.use(`/api/${process.env.API_VERSION}/departments`, departmentRoutes);
+app.use(`/api/${process.env.API_VERSION}/resource-types`, resourceTypeRoutes);
 
 // Fapshi webhook
 let socketID: any;
@@ -105,7 +105,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Outshine Server 🚀");
 });
 
-const PORT: any = process.env.PORT || 5000;
+const PORT: any = process.env.PORT || 4000;
 server.listen(PORT, () => {
   console.log(`server listening on port ${PORT}, 🚀`);
 });
