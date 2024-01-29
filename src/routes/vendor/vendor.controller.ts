@@ -350,7 +350,7 @@ class VendorController {
       const user = await Vendor.findOne({ _id: req.params.id });
       if (user) {
         user.status = req.body.status;
-        await user.save().then(() => {
+        await user.save().then(async () => {
           sendEmail({
             to: user?.email as string,
             subject: `Account ${req.body.status}`,
@@ -361,13 +361,15 @@ class VendorController {
                 ? accountSuspended(user?.username as string, req.body.status)
                 : accountDeactivated(user?.username as string, req.body.status),
           });
+          const response = await Vendor.findOne({ _id: req.params.id });
           return res.status(200).json({
-            message: "instructor status updated",
+            message: "vendor status updated",
+            response,
           });
         });
       } else {
         return res.status(404).json({
-          message: "instructor not found",
+          message: "vendor not found",
         });
       }
     } catch (error) {

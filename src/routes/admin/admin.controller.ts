@@ -86,7 +86,7 @@ class AdminController {
             res.status(500).json({
               message: `Application is still under review`,
             });
-          } else if (user.status !== "active") {
+          } else if (user.status !== "approved") {
             res.status(500).json({
               message: `Account ${user.status}, contact support for more info.`,
             });
