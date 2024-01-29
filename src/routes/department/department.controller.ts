@@ -82,8 +82,10 @@ class DepartmentController {
         }
       );
       if (department.acknowledged) {
+        const response = await Department.findOne({ _id: req.params.id });
         res.status(200).json({
           message: "success",
+          response,
         });
       } else {
         res.status(404).json({

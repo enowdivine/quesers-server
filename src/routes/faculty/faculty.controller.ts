@@ -82,8 +82,10 @@ class FacultyController {
         }
       );
       if (faculty.acknowledged) {
+        const response = await Faculty.findOne({ _id: req.params.id });
         res.status(200).json({
           message: "success",
+          response,
         });
       } else {
         res.status(404).json({

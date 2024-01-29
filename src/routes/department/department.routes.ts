@@ -7,7 +7,7 @@ const department = new Department();
 router.post("/create", department.create);
 router.get("/read/:id", department.read);
 router.get("/", department.reads);
-router.put("/update", department.update);
-router.delete("/delete", department.delete);
+router.put("/update/:id", department.update);
+router.delete("/delete/:id", department.delete);
 
 export default router;

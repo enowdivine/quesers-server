@@ -80,8 +80,10 @@ class RTController {
         }
       );
       if (resourceType.acknowledged) {
+        const response = await RessourceType.findOne({ _id: req.params.id });
         res.status(200).json({
           message: "success",
+          response,
         });
       } else {
         res.status(404).json({

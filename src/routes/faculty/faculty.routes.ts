@@ -7,7 +7,7 @@ const faculty = new Faculty();
 router.post("/create", faculty.create);
 router.get("/read/:id", faculty.read);
 router.get("/", faculty.reads);
-router.put("/update", faculty.update);
-router.delete("/delete", faculty.delete);
+router.put("/update/:id", faculty.update);
+router.delete("/delete/:id", faculty.delete);
 
 export default router;
