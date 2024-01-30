@@ -9,7 +9,7 @@ class RTController {
       const RT = await School.findOne({ slug: slug });
       if (RT) {
         return res.status(409).json({
-          message: "resourse type already exist",
+          message: "school already exist",
         });
       }
       const newRT = new School({
@@ -26,49 +26,49 @@ class RTController {
         })
         .catch((err) => {
           res.status(500).json({
-            message: "error creating resourse type",
+            message: "error creating school",
             error: err,
           });
         });
     } catch (error) {
-      console.error("error creating resourse type");
+      console.error("error creating school");
     }
   }
 
   async read(req: Request, res: Response) {
     try {
-      const resourceType = await School.findOne({ _id: req.params.id });
-      if (resourceType) {
-        return res.status(200).json(resourceType);
+      const school = await School.findOne({ _id: req.params.id });
+      if (school) {
+        return res.status(200).json(school);
       } else {
         return res.status(404).json({
           message: "resourse type not found",
         });
       }
     } catch (error) {
-      console.error("error fetching resourceType", error);
+      console.error("error fetching school", error);
     }
   }
 
   async reads(req: Request, res: Response) {
     try {
-      const resourceTypes = await School.find().sort({ createdAt: -1 });
-      if (resourceTypes) {
-        return res.status(200).json(resourceTypes);
+      const schools = await School.find().sort({ createdAt: -1 });
+      if (schools) {
+        return res.status(200).json(schools);
       } else {
         return res.status(404).json({
           message: "no resourse type found",
         });
       }
     } catch (error) {
-      console.error("error fetching resourceTypes", error);
+      console.error("error fetching schools", error);
     }
   }
 
   async update(req: Request, res: Response) {
     try {
       const slug = slugify(req.body.title);
-      const resourceType = await School.updateOne(
+      const school = await School.updateOne(
         {
           _id: req.params.id,
         },
@@ -79,7 +79,7 @@ class RTController {
           },
         }
       );
-      if (resourceType.acknowledged) {
+      if (school.acknowledged) {
         const response = await School.findOne({ _id: req.params.id });
         res.status(200).json({
           message: "success",
@@ -104,11 +104,11 @@ class RTController {
         });
       } else {
         res.status(404).json({
-          message: "resourse type not found",
+          message: "school not found",
         });
       }
     } catch (error) {
-      console.error("error deleting resourse type", error);
+      console.error("error deleting school", error);
     }
   }
 }

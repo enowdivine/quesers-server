@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const resource = new mongoose.Schema(
   {
+    category: {
+      type: String,
+    },
     screenshots: {
       type: Array,
       default: [],
@@ -29,7 +32,10 @@ const resource = new mongoose.Schema(
     desc: {
       type: String,
     },
-    resourceType: {
+    exam: {
+      type: String,
+    },
+    school: {
       type: String,
     },
     faculty: {

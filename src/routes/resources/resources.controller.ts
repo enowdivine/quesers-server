@@ -56,13 +56,15 @@ class ResourceController {
           slug: slug,
           features: req.body.features,
           desc: req.body.desc,
-          resourceType: req.body.resourceType,
+          exam: req.body.exam,
+          school: req.body.school,
           faculty: req.body.faculty,
           department: req.body.department,
           semester: req.body.semester,
           price: req.body.price,
           level: req.body.level,
           language: req.body.language,
+          category: req.body.category,
         });
         await course
           .save()
@@ -237,13 +239,15 @@ class ResourceController {
               slug: slug,
               features: req.body.features,
               desc: req.body.desc,
-              resourceType: req.body.resourceType,
+              exam: req.body.exam,
+              school: req.body.school,
               faculty: req.body.faculty,
               department: req.body.department,
               semester: req.body.semester,
               price: req.body.price,
               level: req.body.level,
               language: req.body.language,
+              category: req.body.category,
             },
             $push: {
               screenshots: {
@@ -274,13 +278,15 @@ class ResourceController {
               slug: slug,
               features: req.body.features,
               desc: req.body.desc,
-              resourceType: req.body.resourceType,
+              exam: req.body.exam,
+              school: req.body.school,
               faculty: req.body.faculty,
               department: req.body.department,
               semester: req.body.semester,
               price: req.body.price,
               level: req.body.level,
               language: req.body.language,
+              category: req.body.category,
             },
           }
         );
@@ -424,7 +430,7 @@ class ResourceController {
             return letter.toUpperCase();
           }
         );
-      const resourceType = data.resourceType
+      const school = data.school
         .toLowerCase()
         .replace(
           /^[\u00C0-\u1FFF\u2C00-\uD7FF\w]|\s[\u00C0-\u1FFF\u2C00-\uD7FF\w]/g,
@@ -484,7 +490,7 @@ class ResourceController {
             title: { $regex: title },
           },
           {
-            resourceType: { $regex: resourceType },
+            school: { $regex: school },
           },
           {
             faculty: { $regex: faculty },

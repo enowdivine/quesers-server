@@ -18,10 +18,10 @@ class RTController {
       });
       newRT
         .save()
-        .then((cateegory) => {
+        .then((category) => {
           res.status(201).json({
             message: "success",
-            cateegory,
+            category,
           });
         })
         .catch((err) => {

@@ -9,7 +9,7 @@ class RTController {
       const RT = await Exam.findOne({ slug: slug });
       if (RT) {
         return res.status(409).json({
-          message: "resourse type already exist",
+          message: "exam already exist",
         });
       }
       const newRT = new Exam({
@@ -18,10 +18,10 @@ class RTController {
       });
       newRT
         .save()
-        .then((resourceType) => {
+        .then((exam) => {
           res.status(201).json({
             message: "success",
-            resourceType,
+            exam,
           });
         })
         .catch((err) => {
