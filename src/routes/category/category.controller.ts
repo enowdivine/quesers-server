@@ -1,74 +1,74 @@
 import { Request, Response } from "express";
-import RessourceType from "./rt.model";
+import Category from "./category.model";
 import slugify from "../../helpers/slugify";
 
 class RTController {
   async create(req: Request, res: Response) {
     try {
       const slug = slugify(req.body.title);
-      const RT = await RessourceType.findOne({ slug: slug });
+      const RT = await Category.findOne({ slug: slug });
       if (RT) {
         return res.status(409).json({
-          message: "resourse type already exist",
+          message: "category already exist",
         });
       }
-      const newRT = new RessourceType({
+      const newRT = new Category({
         title: req.body.title,
         slug: slug,
       });
       newRT
         .save()
-        .then((resourceType) => {
+        .then((cateegory) => {
           res.status(201).json({
             message: "success",
-            resourceType,
+            cateegory,
           });
         })
         .catch((err) => {
           res.status(500).json({
-            message: "error creating resourse type",
+            message: "error creating category",
             error: err,
           });
         });
     } catch (error) {
-      console.error("error creating resourse type");
+      console.error("error creating category");
     }
   }
 
   async read(req: Request, res: Response) {
     try {
-      const resourceType = await RessourceType.findOne({ _id: req.params.id });
-      if (resourceType) {
-        return res.status(200).json(resourceType);
+      const category = await Category.findOne({ _id: req.params.id });
+      if (category) {
+        return res.status(200).json(category);
       } else {
         return res.status(404).json({
-          message: "resourse type not found",
+          message: "category not found",
         });
       }
     } catch (error) {
-      console.error("error fetching resourceType", error);
+      console.error("error fetching category", error);
     }
   }
 
   async reads(req: Request, res: Response) {
     try {
-      const resourceTypes = await RessourceType.find().sort({ createdAt: -1 });
-      if (resourceTypes) {
-        return res.status(200).json(resourceTypes);
+      const categories = await Category.find().sort({ createdAt: -1 });
+      if (categories) {
+        return res.status(200).json(categories);
       } else {
         return res.status(404).json({
-          message: "no resourse type found",
+          message: "no category found",
         });
       }
     } catch (error) {
-      console.error("error fetching resourceTypes", error);
+      console.error("error fetching category", error);
     }
   }
 
   async update(req: Request, res: Response) {
     try {
       const slug = slugify(req.body.title);
-      const resourceType = await RessourceType.updateOne(
+      const category = await Category.updateOne(
         {
           _id: req.params.id,
         },
@@ -79,36 +79,36 @@ class RTController {
           },
         }
       );
-      if (resourceType.acknowledged) {
-        const response = await RessourceType.findOne({ _id: req.params.id });
+      if (category.acknowledged) {
+        const response = await Category.findOne({ _id: req.params.id });
         res.status(200).json({
           message: "success",
           response,
         });
       } else {
         res.status(404).json({
-          message: "resourse type not found",
+          message: "category not found",
         });
       }
     } catch (error) {
-      console.error("error updating resourse type", error);
+      console.error("error updating category", error);
     }
   }
 
   async delete(req: Request, res: Response) {
     try {
-      const response = await RessourceType.deleteOne({ _id: req.params.id });
+      const response = await Category.deleteOne({ _id: req.params.id });
       if (response.deletedCount > 0) {
         res.status(200).json({
           message: "success",
         });
       } else {
         res.status(404).json({
-          message: "resourse type not found",
+          message: "category not found",
         });
       }
     } catch (error) {
-      console.error("error deleting resourse type", error);
+      console.error("error deleting category", error);
     }
   }
 }

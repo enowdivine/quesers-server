@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const resoursetype = new mongoose.Schema(
+const exam = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -16,4 +16,4 @@ const resoursetype = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("ResourceType", resoursetype);
+export default mongoose.model("Exam", exam);
