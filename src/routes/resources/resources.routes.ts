@@ -21,6 +21,10 @@ router.get("/resource/:id", resource.resource);
 router.get("/resources", resource.resources);
 router.get("/vendor-resources/:vendorId", resource.vendorResource);
 router.get("/approved-resources", resource.approvedResources);
+router.get(
+  "/approved-resources-by-category/:id",
+  resource.approvedResourcesByCategory
+);
 router.get("/purchased-resources/:userId", resource.purchasedResources);
 router.put(
   "/update-resource/:id",

@@ -168,6 +168,29 @@ class ResourceController {
     }
   }
 
+  async approvedResourcesByCategory(req: Request, res: Response) {
+    try {
+      const resources = await Resource.find({
+        isApproved: true,
+        category: req.params.id,
+      }).sort({
+        createdAt: -1,
+      });
+      if (resources) {
+        return res.status(200).json(resources);
+      } else {
+        return res.status(404).json({
+          message: "no resource found",
+        });
+      }
+    } catch (error) {
+      console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
+    }
+  }
+
   async purchasedResources(req: Request, res: Response) {
     try {
       const user = await UserModel.findOne({ _id: req.params.userId });
