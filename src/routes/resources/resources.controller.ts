@@ -148,6 +148,27 @@ class ResourceController {
     }
   }
 
+  async approvedVendorResource(req: Request, res: Response) {
+    try {
+      const resources = await Resource.find({
+        status: "approved",
+        vendorId: req.params.vendorId,
+      }).sort({ createdAt: -1 });
+      if (resources) {
+        return res.status(200).json(resources);
+      } else {
+        return res.status(404).json({
+          message: "no resource found",
+        });
+      }
+    } catch (error) {
+      console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
+    }
+  }
+
   async approvedResources(req: Request, res: Response) {
     try {
       const resources = await Resource.find({ status: "approved" }).sort({

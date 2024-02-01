@@ -20,6 +20,10 @@ router.post(
 router.get("/resource/:id", resource.resource);
 router.get("/resources", resource.resources);
 router.get("/vendor-resources/:vendorId", resource.vendorResource);
+router.get(
+  "/approved-vendor-resources/:vendorId",
+  resource.approvedVendorResource
+);
 router.get("/approved-resources", resource.approvedResources);
 router.get(
   "/approved-resources-by-category/:id",
