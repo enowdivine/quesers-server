@@ -150,7 +150,7 @@ class ResourceController {
 
   async approvedResources(req: Request, res: Response) {
     try {
-      const resources = await Resource.find({ isApproved: true }).sort({
+      const resources = await Resource.find({ status: "approved" }).sort({
         createdAt: -1,
       });
       if (resources) {
@@ -171,7 +171,7 @@ class ResourceController {
   async approvedResourcesByCategory(req: Request, res: Response) {
     try {
       const resources = await Resource.find({
-        isApproved: true,
+        status: "approved",
         category: req.params.id,
       }).sort({
         createdAt: -1,
