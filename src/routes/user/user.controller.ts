@@ -78,15 +78,15 @@ class UserController {
             }
             if (result) {
               // Check for existing active session
-              const existingSession = await Session.findOne({
-                userId: user._id,
-              });
+              // const existingSession = await Session.findOne({
+              //   userId: user._id,
+              // });
 
-              if (existingSession) {
-                // Invalidate previous session token
-                existingSession.token = "";
-                await existingSession.save();
-              }
+              // if (existingSession) {
+              //   // Invalidate previous session token
+              //   existingSession.token = "";
+              //   await existingSession.save();
+              // }
 
               // Generate new JWT
               const token: string = jwt.sign(
@@ -99,11 +99,11 @@ class UserController {
               );
 
               // Store new session in database
-              const newSession = new Session({
-                userId: user._id,
-                token: token,
-              });
-              await newSession.save();
+              // const newSession = new Session({
+              //   userId: user._id,
+              //   token: token,
+              // });
+              // await newSession.save();
               return res.status(200).json({
                 message: "login successful",
                 token: token,
