@@ -83,7 +83,7 @@ class UserController {
               });
 
               if (existingSession) {
-                // Invalidate previous token
+                // Invalidate previous session token
                 existingSession.token = "";
                 await existingSession.save();
               }
