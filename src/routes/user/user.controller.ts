@@ -324,7 +324,7 @@ class UserController {
 
   async newPassword(req: Request, res: Response) {
     try {
-      let user = await User.findOne({ _id: req.params.id });
+      let user = await User.findOne({ phone: req.body.phone });
       if (user) {
         const { newPassword } = req.body;
         bcrypt.hash(newPassword, 10, async (error: any, hash: any) => {

@@ -22,7 +22,7 @@ router.put(
 );
 router.put("/update-user/:id", userProtected, user.update);
 router.put("/update-password/:id", userProtected, user.updatePassword);
-router.put("/new-password/:id", userProtected, user.newPassword);
+router.put("/new-password", user.newPassword);
 
 // router.put("/add-to-wishlist/:id", user.addToWishlist);
 // router.put("/remove-item-from-wishlist/:id", user.removeFromWishlist);
