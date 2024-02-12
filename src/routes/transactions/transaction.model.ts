@@ -5,19 +5,16 @@ const transaction = new mongoose.Schema(
     transactionType: {
       type: String,
     },
-    resourceId: {
-      type: String,
+    items: {
+      type: Array,
+      default: [],
     },
     userId: {
       type: String,
       required: [true, "userId is reuired"],
     },
-    vendorId: {
-      type: String,
-    },
     transactionId: {
       type: String,
-      required: [true, "transactionId is reuired"],
     },
     financialTransId: {
       type: String,
@@ -42,15 +39,12 @@ const transaction = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      required: [true, "payment method is reuired"],
     },
     status: {
       type: String,
-      required: [true, "status method is reuired"],
     },
     statusCode: {
       type: String,
-      required: [true, "statusCode method is reuired"],
     },
     webhook: {
       type: String,
