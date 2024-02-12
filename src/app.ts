@@ -74,14 +74,12 @@ app.post(
   `/api/${process.env.API_VERSION}/webhook/fapshi-webhook`,
   express.json(),
   async (req: Request, res: Response) => {
-    // Get the transaction status from fapshi's API to be sure of its source
     const event = await fapshi.paymentStatus(req.body.transId);
 
     if (event.statusCode !== 200) {
       return io.to(socketID).emit("status", event);
     }
 
-    // Handle the event
     switch (event.status) {
       case "SUCCESSFUL":
         console.log(event, "successful");
@@ -95,12 +93,10 @@ app.post(
         console.log(event, "expired");
         io.to(socketID).emit("status", event);
         break;
-      // ... handle other event types
       default:
         console.log(`Unhandled event status: ${event.type}`);
         io.to(socketID).emit("status", event);
     }
-    // Return a 200 response to acknowledge receipt of the event
     res.send();
   }
 );
