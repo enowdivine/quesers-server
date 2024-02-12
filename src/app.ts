@@ -74,6 +74,7 @@ app.post(
   `/api/${process.env.API_VERSION}/webhook/fapshi-webhook`,
   express.json(),
   async (req: Request, res: Response) => {
+    console.log("called called called called called");
     const event = await fapshi.paymentStatus(req.body.transId);
 
     if (event.statusCode !== 200) {
