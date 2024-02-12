@@ -87,10 +87,11 @@ class TransactionController {
                     error: err,
                   });
                 });
+            } else {
+              res.status(401).json({
+                message: "Error processing transaction",
+              });
             }
-            res.status(401).json({
-              message: "Error processing transaction",
-            });
           }
         );
       }
