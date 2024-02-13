@@ -32,8 +32,10 @@ class TransactionController {
               await transaction
                 .save()
                 .then(async () => {
+                  console.log("saveedddddddddddd");
                   const allItems: any[] = req.body.items;
                   allItems.map(async (item: any) => {
+                    console.log(item);
                     let resource = await resourceModel.findOne({
                       _id: item._id,
                     });
