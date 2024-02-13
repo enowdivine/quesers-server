@@ -168,6 +168,7 @@ class UserController {
         }
       }
       const multerFiles = JSON.parse(JSON.stringify(req.file));
+      console.log(multerFiles);
       if (multerFiles) {
         const image = {
           doc: multerFiles?.location,
