@@ -26,7 +26,7 @@ class TransactionController {
                 userId: req.body.userId,
                 amount: req.body.amount,
                 phonenumber: req.body.phone,
-                username: req.body.name,
+                username: req.body.username,
                 transactionType: "purchase",
               });
               await transaction

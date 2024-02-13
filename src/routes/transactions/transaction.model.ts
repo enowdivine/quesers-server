@@ -11,7 +11,7 @@ const transaction = new mongoose.Schema(
     },
     userId: {
       type: String,
-      required: [true, "userId is reuired"],
+      required: [true, "userId is required"],
     },
     transactionId: {
       type: String,
@@ -21,21 +21,21 @@ const transaction = new mongoose.Schema(
     },
     amount: {
       type: Number,
-      required: [true, "amount is reuired"],
+      required: [true, "amount is required"],
     },
     revenue: {
       type: Number,
     },
     username: {
       type: String,
-      required: [true, "username is reuired"],
+      required: [true, "username is required"],
     },
     email: {
       type: String,
     },
     phonenumber: {
       type: String,
-      required: [true, "phonenumber is reuired"],
+      required: [true, "phonenumber is required"],
     },
     paymentMethod: {
       type: String,
