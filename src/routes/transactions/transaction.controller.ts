@@ -56,11 +56,15 @@ class TransactionController {
                     );
                   });
 
+                  console.log("one step getting here");
+                  console.log("one step getting here");
+
                   // updating user and vendor
 
                   const user = await userModel.findOne({
                     _id: req.body.userId,
                   });
+                  console.log("hellllllooooooo step getting here");
                   if (user) {
                     let revenue = user.walletBalance;
                     let balance = revenue - req.body.amount;
@@ -71,6 +75,8 @@ class TransactionController {
                         $set: { walletBalance: balance },
                       }
                     );
+
+                    console.log("sssssssssssssssss jjjjjjjjjjjjjjjjjjjjjjj");
 
                     if (userupdate.acknowledged) {
                       res.status(201).json({
