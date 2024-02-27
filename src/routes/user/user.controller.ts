@@ -158,6 +158,28 @@ class UserController {
     }
   }
 
+  async updatePreference(req: Request, res: Response) {
+    const user = await User.updateOne(
+      {
+        _id: req.params.id,
+      },
+      {
+        $set: {
+          preference: req.body,
+        },
+      }
+    );
+    if (user.acknowledged) {
+      res.status(200).json({
+        message: "update successful",
+      });
+    } else {
+      res.status(404).json({
+        message: "user not found",
+      });
+    }
+  }
+
   async uploadProfileImage(req: Request, res: Response) {
     try {
       const user = await User.findOne({ _id: req.params.id });

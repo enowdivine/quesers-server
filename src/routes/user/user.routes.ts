@@ -21,6 +21,7 @@ router.put(
   user.uploadProfileImage
 );
 router.put("/update-user/:id", userProtected, user.update);
+router.put("/update-preference/:id", userProtected, user.updatePreference);
 router.put("/update-password/:id", userProtected, user.updatePassword);
 router.put("/new-password", user.newPassword);
 
