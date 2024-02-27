@@ -71,7 +71,26 @@ io.on("connection", async (socket: any) => {
 });
 
 app.post(
-  `/api/${process.env.API_VERSION}/webhook/fapshi-webhook`,
+  `/api/${process.env.API_VERSION}/initiate-transaction`,
+  (req: Request, res: Response) => {
+    (async function main() {
+      const payment = {
+        amount: req.body.amount,
+        phone: req.body.phone,
+        name: req.body.name,
+        email: req.body.email,
+        userId: req.body.userId,
+        externalId: "",
+        message: "",
+      };
+      const resp = await fapshi.directPay(payment);
+      res.send(resp);
+    })();
+  }
+);
+
+app.post(
+  `/api/${process.env.API_VERSION}/webhook`,
   express.json(),
   async (req: Request, res: Response) => {
     const event = await fapshi.paymentStatus(req.body.transId);
