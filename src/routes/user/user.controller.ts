@@ -170,8 +170,10 @@ class UserController {
       }
     );
     if (user.acknowledged) {
+      const updated = await User.findOne({ _id: req.params.id });
       res.status(200).json({
         message: "update successful",
+        preference: updated?.preference,
       });
     } else {
       res.status(404).json({
