@@ -15,7 +15,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
     process.env.JWT_SECRET as string,
     (err: any, payload: any) => {
       if (err)
-        return res.json({
+        return res.status(500).json({
           success: false,
           message: "Invalid Token",
         });

@@ -192,7 +192,7 @@ class UserController {
         }
       }
       const multerFiles = JSON.parse(JSON.stringify(req.file));
-      console.log(multerFiles);
+      console.log("multer files", multerFiles);
       if (multerFiles) {
         const image = {
           doc: multerFiles?.location,
@@ -234,6 +234,9 @@ class UserController {
       }
     } catch (error) {
       console.error("error uploading profile image", error);
+      res.status(500).json({
+        message: "Error uploading image",
+      });
     }
   }
 
