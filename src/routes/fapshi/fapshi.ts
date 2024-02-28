@@ -1,14 +1,14 @@
 import axios from "axios";
-const baseUrl = "https://sandbox.fapshi.com";
-const headers = {
-  apiuser: "4cf8407a-b21b-447e-9148-88f6d90ee0d4",
-  apikey: "FAK_TEST_9fd60078638a83a51b7b",
-};
-// const baseUrl = "https://live.fapshi.com";
+// const baseUrl = "https://sandbox.fapshi.com";
 // const headers = {
-//   apiuser: "53c8b098-07e8-4b09-af94-a019615eed48",
-//   apikey: "FAK_cbed1d9de6f0bff2c452c493770a38a1",
+//   apiuser: "4cf8407a-b21b-447e-9148-88f6d90ee0d4",
+//   apikey: "FAK_TEST_9fd60078638a83a51b7b",
 // };
+const baseUrl = "https://live.fapshi.com";
+const headers = {
+  apiuser: "83e65a1f-5a1b-49bf-8403-0b3451e44fb2",
+  apikey: "FAK_e55f46c950fe1207fd0fccd030750417",
+};
 
 module.exports = {
   /** 
@@ -104,8 +104,9 @@ module.exports = {
     return new Promise(async function (resolve) {
       try {
         console.log("testiing functions", typeof transId, transId);
-        // if (!transId || typeof transId !== "string")
-        //   resolve(error("invalid type, string expected", 400));
+        if (!transId || typeof transId !== "string") {
+          resolve(error("invalid type, string expected", 400));
+        }
         // if (!/^[a-zA-Z0-9]{8,9}$/.test(transId))
         //   resolve(error("invalid transaction id", 400));
 
