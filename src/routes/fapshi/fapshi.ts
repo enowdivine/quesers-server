@@ -103,6 +103,7 @@ module.exports = {
   paymentStatus(transId: any) {
     return new Promise(async function (resolve) {
       try {
+        console.log("testiing functions", transId);
         if (!transId || typeof transId !== "string")
           resolve(error("invalid type, string expected", 400));
         // if (!/^[a-zA-Z0-9]{8,9}$/.test(transId))
@@ -114,6 +115,7 @@ module.exports = {
           headers: headers,
         };
         const response = await axios(config);
+        console.log("testiing response", 23872368723892392390);
         response.data.statusCode = response.status;
         resolve(response.data);
       } catch (e: any) {
