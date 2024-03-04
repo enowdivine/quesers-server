@@ -109,19 +109,18 @@ class TransactionController {
     try {
       const transaction = new Transaction({
         userId: req.body.userId,
-        transactionId: req.body.transactionId,
-        financialTransId: req.body.financialTransId,
         amount: req.body.amount,
         revenue: req.body.revenue,
         phonenumber: req.body.phone,
         username: req.body.name,
         paymentMethod: req.body.medium,
         status: req.body.status,
-        statusCode: req.body.statusCode,
-        webhook: req.body.webhook,
-        dateInitiated: req.body.dateInitiated,
-        dateConfirmed: req.body.dateConfirmed,
         transactionType: "topup",
+
+        code: req.body.code,
+        operator_reference: req.body.operator_reference,
+        reference: req.body.reference,
+        signature: req.body.signature,
       });
       await transaction
         .save()

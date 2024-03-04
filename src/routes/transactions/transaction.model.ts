@@ -13,12 +13,6 @@ const transaction = new mongoose.Schema(
       type: String,
       required: [true, "userId is required"],
     },
-    transactionId: {
-      type: String,
-    },
-    financialTransId: {
-      type: String,
-    },
     amount: {
       type: Number,
       required: [true, "amount is required"],
@@ -43,17 +37,18 @@ const transaction = new mongoose.Schema(
     status: {
       type: String,
     },
-    statusCode: {
+
+    code: {
       type: String,
     },
-    webhook: {
+    operator_reference: {
       type: String,
     },
-    dateInitiated: {
-      type: Date,
+    reference: {
+      type: String,
     },
-    dateConfirmed: {
-      type: Date,
+    signature: {
+      type: String,
     },
   },
   {
