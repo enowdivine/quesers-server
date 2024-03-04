@@ -18,8 +18,6 @@ import ExamsRoutes from "./routes/exams/exams.routes";
 import SchoolRoutes from "./routes/schools/schools.routes";
 import facultyRoutes from "./routes/faculty/faculty.routes";
 import departmentRoutes from "./routes/department/department.routes";
-// Fapshi imports
-const fapshi = require("./routes/fapshi/fapshi");
 
 const corsOptions = {
   origin: "*",
@@ -59,7 +57,6 @@ app.use(`/api/${process.env.API_VERSION}/departments`, departmentRoutes);
 app.use(`/api/${process.env.API_VERSION}/schools`, SchoolRoutes);
 app.use(`/api/${process.env.API_VERSION}/exams`, ExamsRoutes);
 
-// Fapshi webhook
 let socketID: any;
 io.on("connection", async (socket: any) => {
   console.log("New participant connected");
@@ -70,36 +67,11 @@ io.on("connection", async (socket: any) => {
   });
 });
 
-app.post(
-  `/api/${process.env.API_VERSION}/webhook`,
-  // express.json(),
-  async (req: Request, res: Response) => {
-    const event = await fapshi.paymentStatus(req.body.transId);
-
-    console.log(event);
-
-    if (event.statusCode !== 200) {
-      return io.to(socketID).emit("status", event);
-    }
-
-    switch (event.status) {
-      case "SUCCESSFUL":
-        console.log(event, "successful");
-        io.to(socketID).emit("status", event);
-        break;
-      case "FAILED":
-        console.log(event, "failed");
-        io.to(socketID).emit("status", event);
-        break;
-      case "EXPIRED":
-        console.log(event, "expired");
-        io.to(socketID).emit("status", event);
-        break;
-      default:
-        console.log(`Unhandled event status: ${event.type}`);
-        io.to(socketID).emit("status", event);
-    }
-    res.send();
+app.get(
+  `/api/${process.env.API_VERSION}/mobile-money/webhookcatcher`,
+  (req: Request, res: Response) => {
+    const status = req.query;
+    io.to(socketID).emit("status", status);
   }
 );
 
