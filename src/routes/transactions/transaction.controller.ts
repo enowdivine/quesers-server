@@ -125,7 +125,7 @@ class TransactionController {
       await transaction
         .save()
         .then(async () => {
-          let user = await userModel.findOne({ _id: req.params.id });
+          let user = await userModel.findOne({ _id: req.body.userId });
           if (user) {
             const newWalletBalance = {
               walletBalance: user.walletBalance + req.body.revenue,

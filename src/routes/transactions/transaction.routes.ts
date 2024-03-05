@@ -5,10 +5,10 @@ const router: Router = express.Router();
 const transaction = new Transaction();
 
 router.post("/create", transaction.create);
+router.post("/wallet-top-up", transaction.topUpWallet);
 
 router.get("/transaction/:id", transaction.transaction);
 router.get("/transactions/:vendorId", transaction.vendorTransaction);
 router.get("/transactions", transaction.transactions);
-router.post("/wallet-top-up", transaction.topUpWallet);
 
 export default router;
