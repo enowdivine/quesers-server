@@ -68,7 +68,7 @@ io.on("connection", async (socket: any) => {
 });
 
 app.get(
-  `/api/${process.env.API_VERSION}/mobile-money/webhookcatcher`,
+  `/api/${process.env.API_VERSION}/mobile-money/webhook`,
   (req: Request, res: Response) => {
     const status = req.query;
     io.to(socketID).emit("status", status);
