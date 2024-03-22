@@ -23,10 +23,10 @@ class VendorController {
           key: multerFiles?.key,
         };
         const admin = await AdminModel.findOne({ email: req.body.email });
-        const user = await Vendor.findOne({ phone: req.body.phone });
+        const user = await Vendor.findOne({ email: req.body.email });
         if (user || admin) {
           return res.status(409).json({
-            message: "phone number already exist",
+            message: "email already exist",
           });
         }
         const hash = await bcrypt.hash(req.body.password, 10);
@@ -113,6 +113,11 @@ class VendorController {
     try {
       const user = await Vendor.findOne({ email: req.body.email });
       if (user) {
+        if (user.status === "pending") {
+          return res.status(500).json({
+            message: "Account is under review",
+          });
+        }
         bcrypt.compare(
           req.body.password,
           user.password!,
