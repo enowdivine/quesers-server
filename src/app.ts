@@ -13,7 +13,7 @@ import resourceRoutes from "./routes/resources/resources.routes";
 import withdrawalRoutes from "./routes/withdrawals/withdraw.routes";
 import transactionRoutes from "./routes/transactions/transaction.routes";
 //
-import CategoryRoutes from "./routes/category/category.routes";
+import CategoryRoutes from "./routes/courses/courses.routes";
 import ExamsRoutes from "./routes/exams/exams.routes";
 import SchoolRoutes from "./routes/schools/schools.routes";
 import facultyRoutes from "./routes/faculty/faculty.routes";

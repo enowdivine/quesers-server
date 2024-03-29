@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Category from "./category.model";
+import Category from "./courses.model";
 import slugify from "../../helpers/slugify";
 
 class RTController {
@@ -15,6 +15,12 @@ class RTController {
       const newRT = new Category({
         title: req.body.title,
         slug: slug,
+        exam: req.body.exam,
+        school: req.body.school,
+        faculty: req.body.faculty,
+        department: req.body.department,
+        level: req.body.level,
+        semester: req.body.semester,
       });
       newRT
         .save()
@@ -76,6 +82,12 @@ class RTController {
           $set: {
             title: req.body.title,
             slug: slug,
+            exam: req.body.exam,
+            school: req.body.school,
+            faculty: req.body.faculty,
+            department: req.body.department,
+            level: req.body.level,
+            semester: req.body.semester,
           },
         }
       );

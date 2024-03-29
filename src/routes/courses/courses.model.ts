@@ -10,6 +10,24 @@ const category = new mongoose.Schema(
       type: String,
       required: [true, "slug is required"],
     },
+    exam: {
+      type: String,
+    },
+    school: {
+      type: String,
+    },
+    faculty: {
+      type: String,
+    },
+    department: {
+      type: String,
+    },
+    level: {
+      type: String,
+    },
+    semester: {
+      type: String,
+    },
   },
   {
     timestamps: true,
