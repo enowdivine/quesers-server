@@ -15,10 +15,13 @@ class UserController {
         ),
       });
       return res.status(200).json({
-        message: "success, check your inbox",
+        message: "success, message sent successfully",
       });
     } catch (error: any) {
       console.error("error in forgot password", error);
+      return res.status(500).json({
+        message: "error sending message",
+      });
     }
   }
 }
