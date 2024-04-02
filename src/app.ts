@@ -19,6 +19,8 @@ import SchoolRoutes from "./routes/schools/schools.routes";
 import facultyRoutes from "./routes/faculty/faculty.routes";
 import departmentRoutes from "./routes/department/department.routes";
 
+import emailRoutes from "./routes/emails/emai.routes";
+
 const corsOptions = {
   origin: "*",
   credentials: true,
@@ -56,6 +58,8 @@ app.use(`/api/${process.env.API_VERSION}/faculties`, facultyRoutes);
 app.use(`/api/${process.env.API_VERSION}/departments`, departmentRoutes);
 app.use(`/api/${process.env.API_VERSION}/schools`, SchoolRoutes);
 app.use(`/api/${process.env.API_VERSION}/exams`, ExamsRoutes);
+
+app.use(`/api/${process.env.API_VERSION}/mails`, emailRoutes);
 
 let socketID: any;
 io.on("connection", async (socket: any) => {

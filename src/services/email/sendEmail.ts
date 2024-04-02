@@ -5,6 +5,7 @@ import email from "./templates/email_template";
 dotenv.config();
 
 interface Option {
+  from?: string;
   to: string;
   subject: string;
   message: string;
@@ -20,7 +21,7 @@ export default function mailer(option: Option): void {
     },
   });
   const mailOptions: any = {
-    from: "hello@deonicode.com",
+    from: option.from || "no-reply@quesers.com",
     to: option.to,
     subject: option.subject,
     html: html,
