@@ -30,6 +30,9 @@ router.get(
   resource.approvedResourcesByCategory
 );
 router.get("/purchased-resources/:userId", resource.purchasedResources);
+router.get("/sales-count", resource.totalSaleCounts);
+router.get("/vendor-sales-count/:vendorId", resource.totalSaleCounts);
+
 router.put(
   "/update-resource/:id",
   upload.fields([
@@ -43,8 +46,9 @@ router.put(
 );
 router.put("/update-status/:id", resource.updateStatus);
 router.put("/update-screenshots/:id", resource.updateScreenshotArray);
-router.delete("/delete-resource/:id", resource.deleteResource);
 router.get("/search/:data", resource.searchResource);
 router.get("/fuzzy-search/:data", resource.advancedSearch);
+
+router.delete("/delete-resource/:id", resource.deleteResource);
 
 export default router;

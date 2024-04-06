@@ -94,16 +94,21 @@ class ResourceController {
 
   async resource(req: Request, res: Response) {
     try {
-      const resoure = await Resource.findOne({ _id: req.params.id });
-      if (resoure) {
-        return res.status(200).json(resoure);
+      const resource = await Resource.findOne({ _id: req.params.id });
+      if (resource) {
+        const vendor = await vendorModel.findOne({ _id: resource.vendorId });
+        const resourceWithVendor = {
+          ...resource.toObject(), // Convert Mongoose document to plain JavaScript object
+          vendor: vendor || null, // Attach vendor or null if not found
+        };
+        return res.status(200).json(resourceWithVendor);
       } else {
         return res.status(404).json({
-          message: "resoure not found",
+          message: "resource not found",
         });
       }
     } catch (error) {
-      console.error("error fetching resoure", error);
+      console.error("error fetching resource", error);
       return res.status(500).json({
         message: "error fetching resource",
       });
@@ -113,8 +118,18 @@ class ResourceController {
   async resources(req: Request, res: Response) {
     try {
       const resources = await Resource.find().sort({ createdAt: -1 });
-      if (resources) {
-        return res.status(200).json(resources);
+      const vendors = await vendorModel.find().sort({ createdAt: -1 });
+      if (resources && vendors) {
+        const resourcesWithVendors = resources.map((resource) => {
+          const vendor = vendors.find((vendor) =>
+            vendor._id.equals(resource.vendorId)
+          );
+          return {
+            ...resource.toObject(), // Convert Mongoose document to plain JavaScript object
+            vendor: vendor || null, // Attach vendor or null if not found
+          };
+        });
+        return res.status(200).json(resourcesWithVendors);
       } else {
         return res.status(404).json({
           message: "no resource found",
@@ -133,8 +148,18 @@ class ResourceController {
       const resources = await Resource.find({
         vendorId: req.params.vendorId,
       }).sort({ createdAt: -1 });
-      if (resources) {
-        return res.status(200).json(resources);
+      const vendors = await vendorModel.find().sort({ createdAt: -1 });
+      if (resources && vendors) {
+        const resourcesWithVendors = resources.map((resource) => {
+          const vendor = vendors.find((vendor) =>
+            vendor._id.equals(resource.vendorId)
+          );
+          return {
+            ...resource.toObject(), // Convert Mongoose document to plain JavaScript object
+            vendor: vendor || null, // Attach vendor or null if not found
+          };
+        });
+        return res.status(200).json(resourcesWithVendors);
       } else {
         return res.status(404).json({
           message: "no resource found",
@@ -227,6 +252,69 @@ class ResourceController {
             message: "no resource found",
           });
         }
+      }
+    } catch (error) {
+      console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
+    }
+  }
+
+  async totalSaleCounts(req: Request, res: Response) {
+    try {
+      const resources = await Resource.find().sort({ createdAt: -1 });
+      if (resources) {
+        const totalRevenue = resources.reduce((acc, item) => {
+          if (item.saleCount > 0) {
+            return acc + item.saleCount * item.price;
+          } else {
+            return acc;
+          }
+        }, 0);
+
+        const totalSaleCount = resources.reduce((acc, item) => {
+          return acc + item.saleCount;
+        }, 0);
+        return res
+          .status(200)
+          .json({ totalSaleCount, totalRevenue, resources });
+      } else {
+        return res.status(404).json({
+          message: "no resource found",
+        });
+      }
+    } catch (error) {
+      console.error("error fetching resources", error);
+      return res.status(500).json({
+        message: "error fetching resources",
+      });
+    }
+  }
+
+  async vendorSaleCounts(req: Request, res: Response) {
+    try {
+      const resources = await Resource.find({
+        vendorId: req.params.vendorId,
+      }).sort({ createdAt: -1 });
+      if (resources) {
+        const totalRevenue = resources.reduce((acc, item) => {
+          if (item.saleCount > 0) {
+            return acc + item.saleCount * item.price;
+          } else {
+            return acc;
+          }
+        }, 0);
+        const totalSaleCount = resources.reduce((acc, item) => {
+          return acc + item.saleCount;
+        }, 0);
+        return res
+          .status(200)
+          .json({ totalSaleCount, totalRevenue, resources });
+      } else {
+        return res.status(404).json({
+          message: "no resource found",
+        });
       }
     } catch (error) {
       console.error("error fetching resources", error);

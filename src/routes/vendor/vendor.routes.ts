@@ -19,7 +19,7 @@ router.put(
 );
 router.put("/update-vendor/:id", vendor.update);
 router.put("/update-password/:id", vendor.updatePassword);
-router.put("/new-password/:id", vendor.newPassword);
+router.put("/new-password/:token", vendor.newPassword);
 
 router.delete("/delete-vendor/:id", vendor.deleteVendor);
 router.put("/update-vendor-status/:id", vendor.updateStatus);

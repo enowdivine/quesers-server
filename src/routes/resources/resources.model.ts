@@ -16,7 +16,7 @@ const resource = new mongoose.Schema(
     //
     vendorId: {
       type: String,
-      required: [true, "instructorId is required"],
+      required: [true, "vendor is required"],
     },
     title: {
       type: String,
@@ -52,6 +52,7 @@ const resource = new mongoose.Schema(
     },
     price: {
       type: Number,
+      default: 0,
     },
     saleCount: {
       type: Number,

@@ -1,96 +1,86 @@
 export default function email(subject: string, message: string) {
   return `
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
-      integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-      integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-      crossorigin="anonymous"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-    />
-    <title>Deonicode</title>
-    <style>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+    integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+  <title>Quesers App</title>
+  <style>
+    .wrapper {
+      width: 60%;
+      margin: auto;
+      background-color: white;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+    header {
+      background-color: #219653;
+      padding: 20px;
+      color: white;
+    }
+
+    .logo {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .body-text {
+      text-align: left;
+      margin-top: 20px;
+      padding: 0 20px;
+      min-height: 300px;
+    }
+
+    footer {
+      background-color: grey;
+      padding: 20px;
+      text-align: center;
+      color: whitesmoke;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: whitesmoke;
+    }
+
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: 600px) {
       .wrapper {
-        width: 60%;
-        margin: auto;
-        background-color: white;
-        margin-top: 30px;
-        margin-bottom: 30px;
+        width: 99%;
       }
+    }
+  </style>
+</head>
 
-      header {
-        background-color: #f16126;
-        padding: 20px;
-        color: white;
-      }
-      .logo {
-        text-align: center;
-        margin-top: 20px;
-      }
+<body>
+  <div class="wrapper">
+    <header>
+      <h2>Quesers</h2>
+      ${subject}
+    </header>
+    <div class="logo">
+      <a style="width: 100%" href="https://drive.lienuc.com/uc?id=1KRzZBhX1hi4TO_B9mBLYAz5kwz48-_9z">
+        <img style="width: 10%" crossorigin="anonymous"
+          src="https://drive.lienuc.com/uc?id=1KRzZBhX1hi4TO_B9mBLYAz5kwz48-_9z" alt="Quesers" />
+      </a>
 
-      .body-text {
-        text-align: left;
-        margin-top: 20px;
-        padding: 0 20px;
-        min-height: 300px;
-      }
-      footer {
-        background-color: grey;
-        padding: 20px;
-        text-align: center;
-        color: whitesmoke;
-      }
-      footer a {
-        text-decoration: none;
-        color: whitesmoke;
-      }
-      /* Extra small devices (phones, 600px and down) */
-      @media only screen and (max-width: 600px) {
-        .wrapper {
-          width: 99%;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="wrapper">
-      <header>
-        <h2>Deonicode</h2>
-        ${subject}
-      </header>
-      <div class="logo">
-        <a
-          style="width: 100%"
-          href="https://deonicode-docs.s3.amazonaws.com/logo.png"
-        >
-          <img
-            style="width: 20%"
-            src="https://deonicode-docs.s3.amazonaws.com/logo.png"
-          />
-        </a>
-      </div>
-      <div class="body-text">
-        <p>${message}</p>
-      </div>
-      <!-- <div>
+    </div>
+    <div class="body-text">
+      <p>${message}</p>
+    </div>
+    <!-- <div>
         <h5>Socials</h5>
         <div class="p-2">
           <a href="#"
@@ -113,15 +103,16 @@ export default function email(subject: string, message: string) {
           ></a>
         </div>
       </div> -->
-      <footer>
-        <!-- <p>
+    <footer>
+      <!-- <p>
           <a href="#">Privacy Policy</a> |
           <a href="#">Contact Support</a>
         </p> -->
-        <p>&copy; 2023 Deonicode Learning Platform</p>
-      </footer>
-    </div>
-  </body>
+      <p>&copy; 2024 Cameroon's Leading Past Questions And Solution App</p>
+    </footer>
+  </div>
+</body>
+
 </html>
 `;
 }

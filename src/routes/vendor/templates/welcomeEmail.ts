@@ -1,6 +1,6 @@
-export function welcomeEmail(username: string) {
+export function forgotPassword(url: string) {
   return `
-            <h3>Hi ${username},</h3>
+            <h3>Hi,</h3>
             <p>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis nesciunt
             reiciendis cumque incidunt possimus nulla laudantium ab ullam reprehenderit
@@ -8,10 +8,7 @@ export function welcomeEmail(username: string) {
             tempora?
             </p>
               <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis nesciunt
-            reiciendis cumque incidunt possimus nulla laudantium ab ullam reprehenderit
-            debitis, illo consequatur unde dolor, omnis qui necessitatibus. Natus, ipsa
-            tempora?
+            ${url}
             </p>
   `;
 }

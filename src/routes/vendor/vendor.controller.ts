@@ -7,7 +7,7 @@ import AdminModel from "../admin/admin.model";
 import sendEmail from "../../services/email/sendEmail";
 import { deleteObject } from "../../middleware/s3/s3";
 import {
-  welcomeEmail,
+  forgotPassword,
   accountActivated,
   accountSuspended,
   accountDeactivated,
@@ -288,7 +288,7 @@ class VendorController {
         sendEmail({
           to: user.email as string,
           subject: "Quesers: Reset Password",
-          message: welcomeEmail(url),
+          message: forgotPassword(url),
         });
         return res.status(200).json({
           message: "success, check your inbox",
@@ -305,10 +305,16 @@ class VendorController {
 
   async newPassword(req: Request, res: Response) {
     try {
-      let user = await Vendor.findOne({ _id: req.params.id });
+      const decoded: any = jwt.verify(
+        req.params.token,
+        process.env.JWT_SECRET as string
+      );
+      let user = await Vendor.findOne({
+        _id: decoded.userId,
+      });
       if (user) {
-        const { newPassword } = req.body;
-        bcrypt.hash(newPassword, 10, async (error: any, hash: any) => {
+        const { password } = req.body;
+        bcrypt.hash(password, 10, async (error: any, hash: any) => {
           if (error) {
             return res.status(500).json({
               error: error,
@@ -347,6 +353,10 @@ class VendorController {
       }
     } catch (error) {
       console.error("error in new password", error);
+      res.status(500).json({
+        message: "an error occured",
+        error: error,
+      });
     }
   }
 
