@@ -50,6 +50,10 @@ const resource = new mongoose.Schema(
     semester: {
       type: String,
     },
+    numOfPages: {
+      type: Number,
+      default: 0,
+    },
     price: {
       type: Number,
       default: 0,

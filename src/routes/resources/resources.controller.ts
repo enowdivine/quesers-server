@@ -65,6 +65,7 @@ class ResourceController {
           level: req.body.level,
           language: req.body.language,
           category: req.body.category,
+          numOfPages: req.body.numOfPages,
         });
         await course
           .save()
@@ -380,6 +381,7 @@ class ResourceController {
               level: req.body.level,
               language: req.body.language,
               category: req.body.category,
+              numOfPages: req.body.numOfPages,
             },
             $push: {
               screenshots: {
