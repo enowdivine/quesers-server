@@ -6,7 +6,7 @@ class UserController {
   async sendEmail(req: Request, res: Response) {
     try {
       sendEmail({
-        from: req.body.email,
+        from: req.body.email || "spekoapp@gmail.com",
         to: "quesersteam@gmail.com",
         subject: req.body.subject,
         message: websiteMail(
